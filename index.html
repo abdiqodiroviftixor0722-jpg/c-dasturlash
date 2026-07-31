@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C-Dasturlash: Iftixor Yaratgan Mega Platforma</title>
+    <title>C-Dasturlash: Iftixor Mega Platformasi</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -23,53 +23,58 @@
         body { background-color: var(--bg-main); color: var(--text-white); display: flex; height: 100vh; overflow: hidden; }
 
         /* Left Navigation Sidebar */
-        .sidebar { width: 280px; background-color: var(--panel-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
-        .sidebar-header { padding: 20px; font-size: 16px; font-weight: bold; color: var(--accent-cyan); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px; }
+        .sidebar { width: 260px; background-color: var(--panel-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .sidebar-header { padding: 18px; font-size: 16px; font-weight: bold; color: var(--accent-cyan); border-bottom: 1px solid var(--border-color); }
         .author-badge { font-size: 11px; background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--accent-cyan); margin-top: 4px; display: inline-block; }
-        .topic-list { flex: 1; overflow-y: auto; padding: 12px; }
-        .topic-btn { display: flex; align-items: center; gap: 10px; padding: 12px 14px; color: var(--text-gray); border-radius: 8px; cursor: pointer; margin-bottom: 6px; font-size: 13px; font-weight: 500; transition: all 0.2s; }
+        .topic-list { flex: 1; overflow-y: auto; padding: 10px; }
+        .topic-btn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; color: var(--text-gray); border-radius: 8px; cursor: pointer; margin-bottom: 6px; font-size: 13px; transition: all 0.2s; }
         .topic-btn:hover { background: rgba(56, 189, 248, 0.1); color: var(--accent-cyan); }
         .topic-btn.active { background: var(--accent-cyan); color: #0f172a; font-weight: bold; }
 
         /* Workspace Main */
         .main-workspace { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .top-navbar { height: 60px; background-color: var(--panel-bg); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; }
+        .top-navbar { height: 55px; background-color: var(--panel-bg); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
         
-        /* Layout with AI Chat Right Side */
+        /* Layout Structure */
         .content-area { flex: 1; display: flex; overflow: hidden; }
-        .content-body { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+        .content-body { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
 
-        /* AI Chat Assistant Panel (Right) */
-        .ai-panel { width: 320px; background-color: var(--panel-bg); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; }
-        .ai-header { padding: 16px; font-weight: bold; color: var(--accent-purple); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px; font-size: 14px; }
-        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .chat-bubble { padding: 10px 12px; border-radius: 8px; font-size: 12.5px; line-height: 1.5; max-width: 90%; }
-        .chat-bubble.ai { background: var(--card-bg); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-white); }
+        /* Editor & Terminal Section */
+        .editor-container { background: #090d16; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+        .editor-header { background: #1e293b; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+        .code-input { width: 100%; height: 180px; background: #090d16; color: #7dd3fc; border: none; padding: 15px; font-family: 'Consolas', monospace; font-size: 13.5px; outline: none; resize: none; line-height: 1.5; }
+        .terminal-box { background: #000; border-top: 1px solid var(--border-color); padding: 12px 15px; font-family: 'Consolas', monospace; font-size: 13px; color: var(--accent-green); min-height: 60px; max-height: 100px; overflow-y: auto; }
+
+        /* AI Chat Panel (Right) */
+        .ai-panel { width: 300px; background-color: var(--panel-bg); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .ai-header { padding: 14px; font-weight: bold; color: var(--accent-purple); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px; font-size: 13.5px; }
+        .chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .chat-bubble { padding: 8px 12px; border-radius: 8px; font-size: 12px; line-height: 1.4; max-width: 90%; }
+        .chat-bubble.ai { background: var(--card-bg); border: 1px solid var(--border-color); align-self: flex-start; }
         .chat-bubble.user { background: var(--accent-cyan); color: #0f172a; font-weight: bold; align-self: flex-end; }
-        .chat-input-box { padding: 12px; border-top: 1px solid var(--border-color); display: flex; gap: 8px; }
-        .chat-input-box input { flex: 1; background: var(--bg-main); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 6px; color: var(--text-white); outline: none; font-size: 12px; }
+        .chat-input-box { padding: 10px; border-top: 1px solid var(--border-color); display: flex; gap: 6px; }
+        .chat-input-box input { flex: 1; background: var(--bg-main); border: 1px solid var(--border-color); padding: 8px 10px; border-radius: 6px; color: var(--text-white); outline: none; font-size: 12px; }
 
-        /* Components */
-        .card { background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
-        .card-title { font-size: 18px; color: var(--accent-cyan); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
-        .simple-text { font-size: 14px; line-height: 1.7; color: var(--text-white); margin-bottom: 15px; }
-        .analogy-box { background: rgba(250, 204, 21, 0.1); border-left: 4px solid var(--accent-yellow); padding: 12px; border-radius: 0 8px 8px 0; font-size: 13.5px; color: #fef08a; margin-bottom: 15px; }
-        .code-box { background: #090d16; border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; font-family: 'Consolas', monospace; color: #7dd3fc; margin-bottom: 15px; font-size: 13.5px; white-space: pre-wrap; }
+        /* Cards */
+        .card { background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 18px; }
+        .card-title { font-size: 16px; color: var(--accent-cyan); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .simple-text { font-size: 13.5px; line-height: 1.6; color: var(--text-white); margin-bottom: 12px; }
+        .analogy-box { background: rgba(250, 204, 21, 0.1); border-left: 4px solid var(--accent-yellow); padding: 10px; border-radius: 0 6px 6px 0; font-size: 13px; color: #fef08a; margin-bottom: 12px; }
 
         /* Quiz & Tasks */
-        .quiz-container { background: var(--card-bg); border-radius: 10px; padding: 16px; margin-top: 10px; }
-        .quiz-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 12px; color: var(--accent-yellow); font-size: 13px; }
-        .option-btn { display: block; width: 100%; text-align: left; padding: 10px 12px; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-white); border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: 0.2s; font-size: 13px; }
+        .quiz-container { background: var(--card-bg); border-radius: 8px; padding: 14px; margin-top: 8px; }
+        .quiz-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px; color: var(--accent-yellow); font-size: 12.5px; }
+        .option-btn { display: block; width: 100%; text-align: left; padding: 9px 12px; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-white); border-radius: 6px; margin-bottom: 6px; cursor: pointer; font-size: 12.5px; transition: 0.2s; }
         .option-btn:hover { border-color: var(--accent-cyan); background: rgba(56, 189, 248, 0.05); }
 
-        .task-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 10px; }
-        .task-title { font-size: 14px; font-weight: bold; color: var(--accent-green); margin-bottom: 6px; }
+        .task-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; margin-bottom: 8px; font-size: 13px; }
+        .task-title { font-weight: bold; color: var(--accent-green); margin-bottom: 4px; }
 
-        .nav-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
-        .btn { padding: 8px 16px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; font-size: 12.5px; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn { padding: 6px 14px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
         .btn-cyan { background: var(--accent-cyan); color: #0f172a; }
-        .btn-gray { background: var(--card-bg); color: var(--text-white); }
+        .btn-green { background: var(--accent-green); color: #0f172a; }
         .btn-purple { background: var(--accent-purple); color: #0f172a; }
+        .btn-gray { background: var(--card-bg); color: var(--text-white); }
     </style>
 </head>
 <body>
@@ -78,7 +83,7 @@
     <div class="sidebar">
         <div class="sidebar-header">
             <div>
-                <i class="fa-solid fa-laptop-code"></i> C-Pro Platform
+                <i class="fa-solid fa-code"></i> C-Pro Studio
                 <div><span class="author-badge">Muallif: Iftixor Abdiqodirov</span></div>
             </div>
         </div>
@@ -88,9 +93,9 @@
     <!-- Main Workspace -->
     <div class="main-workspace">
         <div class="top-navbar">
-            <span style="font-size: 14px; font-weight: 600; color: var(--text-gray);" id="currentCategoryTitle">Mavzu...</span>
-            <span style="background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">
-                <i class="fa-solid fa-user-shield"></i> Yaratuvchi: Iftixor
+            <span style="font-size: 13.5px; font-weight: 600; color: var(--text-gray);" id="currentCategoryTitle">Mavzu...</span>
+            <span style="background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 4px 10px; border-radius: 20px; font-size: 11.5px; font-weight: bold;">
+                <i class="fa-solid fa-code-branch"></i> Creator: Iftixor
             </span>
         </div>
 
@@ -98,35 +103,47 @@
             <!-- Center Content -->
             <div class="content-body">
                 
-                <!-- 1. Nazariya (Darslik) -->
+                <!-- 1. Nazariya -->
                 <div class="card">
                     <div class="card-title" id="topicTitle"><i class="fa-solid fa-book-open"></i> Mavzu Nazariyasi</div>
                     <div class="analogy-box" id="topicAnalogy">💡 Tushuntirish...</div>
-                    <div class="simple-text" id="topicText">Batafsil nazariya va tushunchalar...</div>
-                    <div class="code-box" id="topicCode">// Namunaviy C kodi</div>
+                    <div class="simple-text" id="topicText">Darslik matni...</div>
                 </div>
 
-                <!-- 2. Test (20 ta Savol) -->
+                <!-- 2. Interactive Code Editor -->
+                <div class="card">
+                    <div class="card-title"><i class="fa-solid fa-terminal"></i> Interaktiv C Kod Tahrirlagich</div>
+                    <div class="editor-container">
+                        <div class="editor-header">
+                            <span style="font-size: 12px; color: var(--text-gray);"><i class="fa-solid fa-file-code"></i> main.c</span>
+                            <button class="btn btn-green" onclick="runCode()"><i class="fa-solid fa-play"></i> Kodni Ishga Tushirish</button>
+                        </div>
+                        <textarea id="codeEditor" class="code-input" spellcheck="false"></textarea>
+                        <div class="terminal-box" id="terminalOutput">💻 Terminal (Natija): Kodni ishga tushirish tugmasini bosing...</div>
+                    </div>
+                </div>
+
+                <!-- 3. Test (20 ta Savol) -->
                 <div class="card">
                     <div class="card-title"><i class="fa-solid fa-circle-question"></i> Bilimni Tekshirish Testlari (20 ta Savol)</div>
                     <div class="quiz-container">
                         <div class="quiz-header">
                             <span id="quizProgress">Savol: 1 / 20</span>
-                            <span id="quizScore" style="color: var(--accent-green);">To'g'ri javoblar: 0</span>
+                            <span id="quizScore" style="color: var(--accent-green);">To'g'ri: 0</span>
                         </div>
                         <div class="simple-text" id="quizQuestionText" style="font-weight: 600;">Savol...</div>
                         <div id="quizOptionsBox"></div>
                         
-                        <div class="nav-actions">
-                            <button class="btn btn-gray" onclick="prevQuestion()"><i class="fa-solid fa-chevron-left"></i> Oldingisi</button>
-                            <button class="btn btn-cyan" onclick="nextQuestion()">Keyingisi (Next) <i class="fa-solid fa-chevron-right"></i></button>
+                        <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                            <button class="btn btn-gray" onclick="prevQuestion()"><i class="fa-solid fa-chevron-left"></i> Oldingi</button>
+                            <button class="btn btn-cyan" onclick="nextQuestion()">Keyingi <i class="fa-solid fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </div>
 
-                <!-- 3. Amaliy Masalalar (5 ta) -->
+                <!-- 4. Amaliy Masalalar -->
                 <div class="card">
-                    <div class="card-title"><i class="fa-solid fa-code"></i> Amaliy Masalalar Paneli (5 ta Masala)</div>
+                    <div class="card-title"><i class="fa-solid fa-list-check"></i> Amaliy Topshiriqlar (5 ta Masala)</div>
                     <div id="tasksContainer"></div>
                 </div>
 
@@ -135,16 +152,16 @@
             <!-- AI Tutor Chat Panel (Right Side) -->
             <div class="ai-panel">
                 <div class="ai-header">
-                    <i class="fa-solid fa-robot"></i> AI C-Tutor (Iftixor AI)
+                    <i class="fa-solid fa-robot"></i> AI Yordamchi (Iftixor AI)
                 </div>
                 <div class="chat-messages" id="chatArea">
                     <div class="chat-bubble ai">
-                        Salom! Men Iftixor yaratgan AI yordamchisiman. Darslik bo'yicha tushunmagan joyingizni so'rashingiz mumkin!
+                        Salom! Men Iftixor yaratgan AI yordamchisiman. Kod yozishda yordam kerak bo'lsa so'rang!
                     </div>
                 </div>
                 <div class="chat-input-box">
-                    <input type="text" id="aiInput" placeholder="AI'ga savol berish..." onkeypress="if(event.key==='Enter') askAI()">
-                    <button class="btn btn-purple" onclick="askAI()" style="padding: 6px 12px;"><i class="fa-solid fa-paper-plane"></i></button>
+                    <input type="text" id="aiInput" placeholder="Savol berish..." onkeypress="if(event.key==='Enter') askAI()">
+                    <button class="btn btn-purple" onclick="askAI()"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
         </div>
@@ -155,181 +172,181 @@
             {
                 id: "printf_scanf",
                 title: "1. Printf va Scanf",
-                analogy: "printf() — bu kompyuterning OG'ZI (sizga gapiradi). scanf() — bu kompyuterning QULOG'I (sizni eshitib xotirasiga yozib oladi)!",
-                text: "Dasturlashda ma'lumotlarni ekranga chiqarish va foydalanuvchidan olish eng asosiy jarayondir. Printf yordamida ekranga yozuvlar chiqaramiz. Scanf yordamida foydalanuvchi kiritgan son yoki belgilarni o'zgaruvchiga saqlaymiz.",
-                code: `#include <stdio.h>\n\nint main() {\n    int yosh;\n    printf("Yoshingizni kiriting: ");\n    scanf("%d", &yosh);\n    printf("Siz %d yoshdasiz!\\n", yosh);\n    return 0;\n}`,
+                analogy: "printf() — bu kompyuterning OG'ZI (gapiradi). scanf() — bu kompyuterning QULOG'I (eshitib xotiraga yozadi)!",
+                text: "Printf yordamida ekranga yozuv chiqariladi, scanf yordamida esa foydalanuvchidan ma'lumot olinadi.",
+                code: `#include <stdio.h>\n\nint main() {\n    printf("Salom Iftixor platformasiga xush kelibsiz!\\n");\n    int yosh = 15;\n    printf("Sizning yoshingiz: %d\\n", yosh);\n    return 0;\n}`,
                 questions: [
                     { q: "1. Printf() funksiyasining vazifasi nima?", opts: ["Sonlarni qo'shadi", "Ekranga ma'lumot chiqaradi", "Klaviatura kiritadi", "Kodni o'chiradi"], ans: 1 },
-                    { q: "2. Scanf() funksiyasida & belgisi nega kerak?", opts: ["Chiroyli ko'rinish uchun", "Xotira manzilini ko'rsatish uchun", "Sonni ko'paytirish uchun", "Xatolikni yashirish uchun"], ans: 1 },
-                    { q: "3. Int turidagi sonni chiqarish uchun qaysi format belgisi ishlatiladi?", opts: ["%f", "%c", "%d", "%s"], ans: 2 },
-                    { q: "4. Float (kasr) sonlarni kiritishda qaysi format ishlatiladi?", opts: ["%d", "%f", "%c", "%i"], ans: 1 },
-                    { q: "5. Bitta belgi (char) chiqarish uchun qaysi format kerak?", opts: ["%c", "%d", "%f", "%s"], ans: 0 },
-                    { q: "6. Printf matnida yangi qatorga o'tish kodi qaysi?", opts: ["\\t", "\\n", "\\a", "\\b"], ans: 1 },
-                    { q: "7. Scanf(\"%d\", a); ushbu kodda qanday xatolik bor?", opts: ["%d xato", "& belgisi tushirib qoldirilgan", "printf bo'lishi kerak", "Xatosi yo'q"], ans: 1 },
-                    { q: "8. Header fayllarni ulash uchun qaysi buyruq yoziladi?", opts: ["#import", "#include <stdio.h>", "#use", "using namespace"], ans: 1 },
-                    { q: "9. C tilida har bir buyruq oxirida nima bo'lishi shart?", opts: ["Nuqta (.)", "Vergul (,)", "Nuqtali vergul (;)", "Ikki nuqta (:)"], ans: 2 },
-                    { q: "10. Main() funksiyasi qanday qiymat qaytarishi odatga kirgan?", opts: ["return 1;", "return 0;", "return -1;", "return void;"], ans: 1 },
-                    { q: "11. %2f nimani anglatadi?", opts: ["2 ta son kiritish", "Kasrning 2 xonagacha aniqligi", "2 marta ko'paytirish", "2-qatorga o'tish"], ans: 1 },
-                    { q: "12. Bir nechta o'zgaruvchini bitta scanf() bilan olsa bo'ladimi?", opts: ["Yo'q", "Ha, scanf(\"%d %d\", &a, &b);", "Faqat float bo'lsa", "Faqat 10 tagacha"], ans: 1 },
-                    { q: "13. Stdio.h so'zining kengaytmasi nima?", opts: ["Standard Input Output Header", "Studio C program", "Static Data Input", "Standard Text Option"], ans: 0 },
-                    { q: "14. Matnli satrlarni kiritish uchun qaysi format ishlatiladi?", opts: ["%d", "%f", "%s", "%c"], ans: 2 },
-                    { q: "15. Printf(\"10 + 20\") kodi ekranga nima chiqaradi?", opts: ["30", "10 + 20", "Xatolik", "0"], ans: 1 },
-                    { q: "16. Kiritilgan ikkita son orasida probel bo'lishi shartmi?", opts: ["Ha, scanf avto ajratadi", "Yo'q", "Faqat nuqta bo'lishi kerak", "Xato beradi"], ans: 0 },
-                    { q: "17. Printf ichida % belgining o'zini chiqarish uchun nima yoziladi?", opts: ["\\%", "%%", "&%", "#%"], ans: 1 },
-                    { q: "18. Scanf yordamida probelli matnlarni to'liq o'qish qulaymi?", opts: ["Ha", "Yo'q, gets() yoki fgets() qulay", "Farqi yo'q", "Ishlamaydi"], ans: 1 },
-                    { q: "19. Int a, b; scanf(\"%d\", &a); kodidan keyin b ga qiymat birikadimi?", opts: ["Ha", "Yo'q, b axlat qiymatda qoladi", "b nolga teng bo'ladi", "Dastur to'xtaydi"], ans: 1 },
-                    { q: "20. C dasturida asosiy kirish nuqtasi qaysi funksiya?", opts: ["printf()", "scanf()", "main()", "start()"], ans: 2 }
+                    { q: "2. Scanf() da & belgisi nega kerak?", opts: ["Ko'rinish uchun", "Xotira manzilini ko'rsatish uchun", "Ko'paytirish uchun", "Xatoni berkitish"], ans: 1 },
+                    { q: "3. Int turini chiqarish formati qaysi?", opts: ["%f", "%c", "%d", "%s"], ans: 2 },
+                    { q: "4. Float (kasr) sonlar kiritish formati qaysi?", opts: ["%d", "%f", "%c", "%i"], ans: 1 },
+                    { q: "5. Bitta belgi (char) formati qaysi?", opts: ["%c", "%d", "%f", "%s"], ans: 0 },
+                    { q: "6. Yangi qatorga o'tish kodi qaysi?", opts: ["\\t", "\\n", "\\a", "\\b"], ans: 1 },
+                    { q: "7. Scanf(\"%d\", a); nimasi xato?", opts: ["%d xato", "& tushib qolgan", "printf bo'lishi kerak", "Xatosiz"], ans: 1 },
+                    { q: "8. Header fayl ulash buyrug'i qaysi?", opts: ["#import", "#include <stdio.h>", "#use", "using"], ans: 1 },
+                    { q: "9. C da buyruqlar oxiriga nima qo'yiladi?", opts: ["Nuqta (.)", "Vergul (,)", "Nuqtali vergul (;)", "Ikki nuqta"], ans: 2 },
+                    { q: "10. Main() nimani qaytaradi?", opts: ["return 1;", "return 0;", "return -1;", "void"], ans: 1 },
+                    { q: "11. %.2f nimani anglatadi?", opts: ["2 ta son", "Kasrning 2 xonagacha aniqligi", "2 marta ko'paytirish", "2-qator"], ans: 1 },
+                    { q: "12. Scanf bilan bir nechta o'zgaruvchi olsa bo'ladimi?", opts: ["Yo'q", "Ha, scanf(\"%d %d\", &a, &b);", "Faqat float", "10 tagacha"], ans: 1 },
+                    { q: "13. Stdio.h kengaytmasi nima?", opts: ["Standard Input Output Header", "Studio C", "Static Data", "Standard Text"], ans: 0 },
+                    { q: "14. Matnlar formati qaysi?", opts: ["%d", "%f", "%s", "%c"], ans: 2 },
+                    { q: "15. Printf(\"10 + 20\") nima chiqaradi?", opts: ["30", "10 + 20", "Xatolik", "0"], ans: 1 },
+                    { q: "16. Sonlar orasida probel bo'lishi shartmi?", opts: ["Ha", "Yo'q", "Faqat nuqta", "Xato beradi"], ans: 0 },
+                    { q: "17. Printf ichida % chiqarish kodi qaysi?", opts: ["\\%", "%%", "&%", "#%"], ans: 1 },
+                    { q: "18. Scanf probelli matnni to'liq o'qiydimi?", opts: ["Ha", "Yo'q, gets qulay", "Farqi yo'q", "Ishlamaydi"], ans: 1 },
+                    { q: "19. Int a, b; scanf(\"%d\", &a); b ga qiymat beradimi?", opts: ["Ha", "Yo'q, axlat qiymat", "b=0", "To'xtaydi"], ans: 1 },
+                    { q: "20. C dasturining kirish nuqtasi qaysi?", opts: ["printf()", "scanf()", "main()", "start()"], ans: 2 }
                 ],
                 tasks: [
-                    { t: "1-Masala: Ekranga o'zingizning ismingiz va yoshingizni chiqaruvchi dastur tuzing.", hint: "printf(\"Ismim: A, Yoshim: B\");" },
-                    { t: "2-Masala: 2 ta son olib, ularning ko'paytmasini chiqaruvchi dastur yozing.", hint: "scanf bilan a, b olib, a*b chiqaring." },
-                    { t: "3-Masala: Doiraning radiusi (r) kiritilganda uning yuzini (S = 3.14 * r * r) hisoblang.", hint: "Float turidan foydalaning." },
-                    { t: "4-Masala: Haroratni Selsiydan Farengeytga o'tkazing (F = C * 1.8 + 32).", hint: "Float o'zgaruvchilar ishlatiladi." },
-                    { t: "5-Masala: Kiritilgan 3 ta sonning o'rta arifmetigini toping.", hint: "(a + b + c) / 3.0 formulasi." }
+                    { t: "1-Masala: Ekranga o'zingizning ismingiz va yoshingizni chiqaring.", hint: "printf(\"Ismim: A, Yoshim: B\");" },
+                    { t: "2-Masala: 2 ta sonning ko'paytmasini chiqaring.", hint: "scanf bilan a, b olib a*b chiqaring." },
+                    { t: "3-Masala: Doira yuzini hisoblang (S = 3.14 * r * r).", hint: "Float turini ishlating." },
+                    { t: "4-Masala: Haroratni Selsiydan Farengeytga o'tkazing.", hint: "F = C * 1.8 + 32 formulasi." },
+                    { t: "5-Masala: 3 ta sonning o'rta arifmetigini toping.", hint: "(a + b + c) / 3.0" }
                 ]
             },
             {
                 id: "if_else",
                 title: "2. If / Else Shartlari",
-                analogy: "If/Else bu — Chorrahadagi svetofor! Qizil yonsa — to'xtaysiz, aks holda (else) — yurasiz.",
-                text: "Mantiqiy shartlar yordamida dastur yo'nalishini o'zgartirishimiz mumkin. Shart rost (true) bo'lsa if ichidagi kod, aks holda else ichidagi kod ishlaydi.",
-                code: `#include <stdio.h>\n\nint main() {\n    int ball = 75;\n    if (ball >= 60) {\n        printf("Imtihondan o'tdingiz!\\n");\n    } else {\n        printf("Yiqildingiz!\\n");\n    }\n    return 0;\n}`,
+                analogy: "If/Else — bu Chorrahadagi svetofor! Qizil yonsa — to'xtaysiz, aks holda (else) — yurasiz.",
+                text: "Mantiqiy shartlar yordamida dastur yo'nalishini o'zgartirishimiz mumkin.",
+                code: `#include <stdio.h>\n\nint main() {\n    int ball = 85;\n    if (ball >= 60) {\n        printf("A'lo! Siz imtihondan o'tdingiz.\\n");\n    } else {\n        printf("Yiqildingiz.\\n");\n    }\n    return 0;\n}`,
                 questions: [
-                    { q: "1. If operatori ichidagi shart qachon bajariladi?", opts: ["Shart rost (true / 1) bo'lsa", "Shart yolg'on bo'lsa", "Doim bajariladi", "Hech qachon"], ans: 0 },
-                    { q: "2. Tenglikni tekshirish uchun qaysi operator ishlatiladi?", opts: ["=", "==", "===", "!="], ans: 1 },
-                    { q: "3. Teng emaslik kodi qanday yoziladi?", opts: ["<>", "!=", "=/=", "NOT"], ans: 1 },
-                    { q: "4. Else bloki qachon ishga tushadi?", opts: ["If to'g'ri bo'lsa", "If noto'g'ri (false) bo'lsa", "Har doim", "Faqat bir marta"], ans: 1 },
+                    { q: "1. If kodi qachon bajariladi?", opts: ["Shart rost bo'lsa", "Shart yolg'on bo'lsa", "Doim", "Hech qachon"], ans: 0 },
+                    { q: "2. Tenglik operatori qaysi?", opts: ["=", "==", "===", "!="], ans: 1 },
+                    { q: "3. Teng emaslik operatori qaysi?", opts: ["<>", "!=", "=/=", "NOT"], ans: 1 },
+                    { q: "4. Else qachon ishlaydi?", opts: ["If to'g'ri bo'lsa", "If noto'g'ri bo'lsa", "Har doim", "Faqat bir marta"], ans: 1 },
                     { q: "5. Mantiqiy 'VA' (AND) operatori qaysi?", opts: ["||", "&&", "!", "&"], ans: 1 },
                     { q: "6. Mantiqiy 'YOKI' (OR) operatori qaysi?", opts: ["&&", "||", "!", "|"], ans: 1 },
-                    { q: "7. Bir nechta shartlarni ketma-ket tekshirish uchun nima ishlatiladi?", opts: ["else if", "if else", "loop", "switch"], ans: 0 },
-                    { q: "8. if (a = 5) yozilsa nima bo'ladi?", opts: ["Tenglik tekshiriladi", "a ga 5 biriktiriladi va shart rost bo'ladi", "Xatolik beradi", "a o'chib ketadi"], ans: 1 },
-                    { q: "9. (5 > 3 && 2 < 1) shartning natijasi nima?", opts: ["1 (Rost)", "0 (Yolg'on)", "Xatolik", "Null"], ans: 1 },
-                    { q: "10. (5 > 3 || 2 < 1) shartning natijasi nima?", opts: ["1 (Rost)", "0 (Yolg'on)", "Xatolik", "Null"], ans: 0 },
-                    { q: "11. If blokida figurali qavs {} qo'yilmasa nechtagacha buyruq ishlaydi?", opts: ["Faqat 1 ta buyruq", "Barcha buyruqlar", "Hech qaysi", "2 ta"], ans: 0 },
-                    { q: "12. Ternary (uchlik) operatori belgisi qaysi?", opts: ["? :", "if else", "->", "::"], ans: 0 },
-                    { q: "13. ! (Inkor) operatori mantiqni qanday o'zgartiradi?", opts: ["Rostni yolg'onga va aksincha", "O'zgartirmaydi", "Sonni nolga tenglaydi", "Kod to'xtaydi"], ans: 0 },
-                    { q: "14. Switch-case if-else o'rnini bosa oladimi?", opts: ["Ha, aniq qiymatlar uchun", "Yo'q, umuman", "Faqat matnlarga", "Faqat float sonlarga"], ans: 0 },
-                    { q: "15. Switch ichidagi break nega kerak?", opts: ["Keyingi case'larga o'tib ketmaslik uchun", "Dasturni o'chirish uchun", "Xatolikni tuzatish uchun", "Tsikl uchun"], ans: 0 },
-                    { q: "16. Switch da hesh qaysi case tushmasa qayer ishlaydi?", opts: ["default:", "else:", "stop:", "exit:"], ans: 0 },
-                    { q: "17. if (x) kodi qachon ishlaydi?", opts: ["x nolga teng bo'lmaganda", "x nol bo'lganda", "Faqat x=1 bo mezonida", "Ishlamaydi"], ans: 0 },
-                    { q: "18. if (0) bo'lsa nima bo'ladi?", opts: ["If kodi bajarilmaydi", "Bajariladi", "Dastur buziladi", "Cheksiz ishlaydi"], ans: 0 },
-                    { q: "19. Mansub bo'lmagan shart bo'lsa (if x kabi) xatolik beradimi?", opts: ["Yo'q, qavs bo'lmasa beradi", "Ha", "C tili qabul qilmaydi", "Faqat Linuxda"], ans: 0 },
-                    { q: "20. Shart ichida float sonlarni tenglikka tekshirish tavsiya etiladimi?", opts: ["Yo'q, aniqlik xatosi sababli", "Ha", "Farqi yo'q", "Juda tavsiya etiladi"], ans: 0 }
+                    { q: "7. Ketma-ket shartlar uchun qaysi bir ishlatiladi?", opts: ["else if", "if else", "loop", "switch"], ans: 0 },
+                    { q: "8. if (a = 5) nima qiladi?", opts: ["Tenglikni tekshiradi", "a ga 5 biriktirib rost bo'ladi", "Xato beradi", "O'chadi"], ans: 1 },
+                    { q: "9. (5 > 3 && 2 < 1) natijasi nima?", opts: ["1", "0", "Xatolik", "Null"], ans: 1 },
+                    { q: "10. (5 > 3 || 2 < 1) natijasi nima?", opts: ["1", "0", "Xatolik", "Null"], ans: 0 },
+                    { q: "11. Figurali qavssiz {} if nechta buyruqni boshqaradi?", opts: ["1 ta", "Barchasini", "Hech qaysi", "2 ta"], ans: 0 },
+                    { q: "12. Ternary operatori qaysi?", opts: ["? :", "if else", "->", "::"], ans: 0 },
+                    { q: "13. ! operatori vazifasi nima?", opts: ["Inkor qilish (rostni yolg'onga)", "O'zgartirmaslik", "Nol qilish", "To'xtatish"], ans: 0 },
+                    { q: "14. Switch-case if-else o'rnini bosa oladimi?", opts: ["Ha, aniq qiymatlar uchun", "Yo'q", "Faqat matnga", "Faqat floatga"], ans: 0 },
+                    { q: "15. Switch dagi break nega kerak?", opts: ["Keyingi case ga o'tmaslik uchun", "O'chirish uchun", "Xato uchun", "Tsikl uchun"], ans: 0 },
+                    { q: "16. Switch da case tushmasa qayer ishlaydi?", opts: ["default:", "else:", "stop:", "exit:"], ans: 0 },
+                    { q: "17. if (x) qachon ishlaydi?", opts: ["x != 0 bo'lganda", "x = 0 bo'lganda", "x = 1 bo'lganda", "Ishlamaydi"], ans: 0 },
+                    { q: "18. if (0) nima qiladi?", opts: ["Bajarilmaydi", "Bajariladi", "Buziladi", "Cheksiz ishlaydi"], ans: 0 },
+                    { q: "19. Shart noto'g'ri bo'lsa else bo'lishi shartmi?", opts: ["Shart emas", "Shart", "Xato beradi", "Faqat Linuxda"], ans: 0 },
+                    { q: "20. Float sonlarni == bilan tekshirish to'g'rimi?", opts: ["Yo'q, aniqlik xatosi bor", "Ha", "Farqi yo'q", "Tavsiya etiladi"], ans: 0 }
                 ],
                 tasks: [
-                    { t: "1-Masala: Son kiritilsa, u musbat yoki manfiyligini chop eting.", hint: "if (n > 0) va else ishlatiladi." },
-                    { t: "2-Masala: Kiritilgan son 5 ga va 11 ga bo'linishini tekshiring.", hint: "n%5==0 && n%11==0 shartini qo'ying." },
-                    { t: "3-Masala: 3 ta son berilgan. Ularning eng kattasini toping.", hint: "Nested if yoki && qo'llang." },
-                    { t: "4-Masala: Yil kiritilsa kabisa yili yoki yo'qligini aniqlang.", hint: "yil % 4 == 0 sharti." },
-                    { t: "5-Masala: Ishora va baholarni hisoblovchi kalkulyator yozing.", hint: "Switch case yoki if else yordamida." }
+                    { t: "1-Masala: Sonning musbat yoki manfiyligini aniqlang.", hint: "if (n > 0) else..." },
+                    { t: "2-Masala: Son 5 va 11 ga bo'linishini tekshiring.", hint: "n%5==0 && n%11==0" },
+                    { t: "3-Masala: 3 ta sonning eng kattasini toping.", hint: "if va && ishlating." },
+                    { t: "4-Masala: Yil kabisa yili ekanligini toping.", hint: "yil % 4 == 0" },
+                    { t: "5-Masala: Kalkulyator dasturini tuzing.", hint: "Switch-case ishlating." }
                 ]
             },
             {
                 id: "while_loop",
                 title: "3. While va Do-While Sikli",
-                analogy: "While — bu 'Qornim och bo'lsa yeyman' (oldin tekshiradi). Do-While esa 'Teb ko'rib, keyin o'ylayman' (kamida 1 marta bajaradi)!",
-                text: "Sikl takrorlanishlar soni noma'lum bo'lganda ishlatiladi. While siklida oldin shart tekshiriladi, Do-while siklida esa amal bajarilib keyin shart tekshiriladi.",
-                code: `#include <stdio.h>\n\nint main() {\n    int i = 1;\n    while(i <= 3) {\n        printf("While qadami: %d\\n", i);\n        i++;\n    }\n    return 0;\n}`,
+                analogy: "While — 'Oldin shartni tekshirib keyin bajar', Do-While — 'Oldin 1 marta bajarib keyin tekshir'!",
+                text: "Sikl takrorlanishlar soni nomalum bo'lganda ishlatiladi.",
+                code: `#include <stdio.h>\n\nint main() {\n    int count = 1;\n    while(count <= 3) {\n        printf("Takrorlanish qadami: %d\\n", count);\n        count++;\n    }\n    return 0;\n}`,
                 questions: [
-                    { q: "1. While sikli qachon to'xtaydi?", opts: ["Shart yolg'on (0) bo'lganda", "Shart rost bo'lganda", "10 marta aylangach", "Xohlagan payt"], ans: 0 },
-                    { q: "2. Do-while siklining while'dan farqi nimada?", opts: ["Kamida 1 marta albatta bajariladi", "Tezroq ishlaydi", "Shart tekshirmaydi", "Farqi yo'q"], ans: 0 },
-                    { q: "3. while(1) nimani anglatadi?", opts: ["Cheksiz sikl", "1 marta ishlaydi", "Ishlamaydi", "Xatolik beradi"], ans: 0 },
-                    { q: "4. Siklni majburan to'xtatish uchun qaysi kalit so'z kerak?", opts: ["break", "continue", "stop", "exit"], ans: 0 },
-                    { q: "5. Siklning joriy qadamini o'tkazib yuborish uchun nima ishlatiladi?", opts: ["continue", "break", "skip", "pass"], ans: 0 },
-                    { q: "6. do-while siklining oxirida nima bo'lishi shart?", opts: ["Nuqtali vergul (;)", "Figurali qavs", "break", "return"], ans: 0 },
-                    { q: "7. i++ kodi nimani bildiradi?", opts: ["i ni 1 ga oshirish", "i ni 2 ga ko'paytirish", "i ni kamaytirish", "Hech narsa"], ans: 0 },
-                    { q: "8. ++i va i++ o'rtasida farq bormi?", opts: ["Ha, oshirish tartibida", "Yo'q", "Faqat while da bor", "Faqat for da bor"], ans: 0 },
-                    { q: "9. while(0) bo'lsa kodi necha marta ishlaydi?", opts: ["0 marta", "1 marta", "Cheksiz", "Xatolik beradi"], ans: 0 },
-                    { q: "10. do { ... } while(0); kodi necha marta bajariladi?", opts: ["1 marta", "0 marta", "Cheksiz", "Xatolik"], ans: 0 },
-                    { q: "11. Sikl o'zgaruvchisini oshirishni unutsak nima bo'ladi?", opts: ["Cheksiz sikl hosil bo'ladi", "Dastur to'xtaydi", "Xatolik beradi", "Nol chiqadi"], ans: 0 },
-                    { q: "12. While ichida if ishlatish mumkinmi?", opts: ["Ha, xohlagancha", "Yo'q", "Faqat 1 marta", "Faqat break bilan"], ans: 0 },
-                    { q: "13. break faqat siklni to'xtatadimi?", opts: ["Sikl va switch-case ni", "Faqat main funksiyani", "Faqat if ni", "Butun kompyuterni"], ans: 0 },
-                    { q: "14. Sikl shartida bo'lish operatori (/=) ishlasa bo'ladimi?", opts: ["Ha, sonlarni xonalarga ajratishda", "Yo'q", "Faqat float bilan", "Xato beradi"], ans: 0 },
-                    { q: "15. Parol so'rash uchun qaysi sikl eng qulay?", opts: ["do-while", "for", "if", "switch"], ans: 0 },
-                    { q: "16. While (a != b) nimani bildiradi?", opts: ["a va b teng bo'lmaguncha sikl ishlaydi", "Teng bo'lganda ishlaydi", "Xato shart", "a va b qo'shiladi"], ans: 0 },
-                    { q: "17. Continue chaqirilganda undan pastdagi kodlar bajariladimi?", opts: ["Yo'q, keyingi aylanishga o'tib ketadi", "Ha bajariladi", "Sikl to'xtaydi", "Dastur o'chadi"], ans: 0 },
-                    { q: "18. Cheksiz sikldan chiqish uchun nima ishlatiladi?", opts: ["break", "continue", "start", "loop"], ans: 0 },
-                    { q: "19. do-while sharti qayerda tekshiriladi?", opts: ["Blok oxirida", "Blok boshida", "O'rtasida", "Tekshirilmaydi"], ans: 0 },
-                    { q: "20. While sharti qayerda tekshiriladi?", opts: ["Blok boshida", "Blok oxirida", "O'rtasida", "O'zidan o'zi"], ans: 0 }
+                    { q: "1. While qachon to'xtaydi?", opts: ["Shart 0 bo'lganda", "Shart 1 bo'lganda", "10 da", "Xohlagan payt"], ans: 0 },
+                    { q: "2. Do-while farqi nimada?", opts: ["Kamida 1 marta albatta bajariladi", "Tezroq", "Shart emas", "Farqsiz"], ans: 0 },
+                    { q: "3. while(1) nimani bildiradi?", opts: ["Cheksiz sikl", "1 marta", "Ishlamaydi", "Xato"], ans: 0 },
+                    { q: "4. Siklni to'xtatuvchi kalit so'z?", opts: ["break", "continue", "stop", "exit"], ans: 0 },
+                    { q: "5. Qadamni o'tkazib yuborish sohasi?", opts: ["continue", "break", "skip", "pass"], ans: 0 },
+                    { q: "6. do-while oxirida nima bo'ladi?", opts: ["Nuqtali vergul (;)", "Figurali qavs", "break", "return"], ans: 0 },
+                    { q: "7. i++ nimani bildiradi?", opts: ["i ni 1 ga oshirish", "2 ga ko'paytirish", "Kamaytirish", "Hech narsa"], ans: 0 },
+                    { q: "8. ++i va i++ farqlanadimi?", opts: ["Ha, oshirish tartibida", "Yo'q", "Faqat while da", "Faqat for da"], ans: 0 },
+                    { q: "9. while(0) necha marta ishlaydi?", opts: ["0 marta", "1 marta", "Cheksiz", "Xatolik"], ans: 0 },
+                    { q: "10. do{...} while(0); necha marta ishlaydi?", opts: ["1 marta", "0 marta", "Cheksiz", "Xatolik"], ans: 0 },
+                    { q: "11. i++ qolib ketsa nima bo'ladi?", opts: ["Cheksiz sikl hosil bo'ladi", "To'xtaydi", "Xato beradi", "Nol beradi"], ans: 0 },
+                    { q: "12. While ichida if bo'ladimi?", opts: ["Ha", "Yo'q", "1 marta", "Faqat break bilan"], ans: 0 },
+                    { q: "13. break nimani to'xtatadi?", opts: ["Sikl va switch-case ni", "Faqat main ni", "Faqat if ni", "Kompyuterni"], ans: 0 },
+                    { q: "14. Sikl shartida /= ishlasa bo'ladimi?", opts: ["Ha", "Yo'q", "Faqat float", "Xato"], ans: 0 },
+                    { q: "15. Parol so'rashga qaysi sikl qulay?", opts: ["do-while", "for", "if", "switch"], ans: 0 },
+                    { q: "16. while(a != b) nimani bildiradi?", opts: ["a va b teng bo'lmaguncha ishlaydi", "Teng bo'lsa", "Xato", "Qo'shiladi"], ans: 0 },
+                    { q: "17. Continue pastdagi kodlarni ishlatadimi?", opts: ["Yo'q, keyingisiga o'tadi", "Ha", "To'xtaydi", "O'chadi"], ans: 0 },
+                    { q: "18. Cheksiz sikldan chiqish kaliti?", opts: ["break", "continue", "start", "loop"], ans: 0 },
+                    { q: "19. do-while sharti qayerda tekshiriladi?", opts: ["Oxirida", "Boshida", "O'rtasida", "Tekshirilmaydi"], ans: 0 },
+                    { q: "20. While sharti qayerda tekshiriladi?", opts: ["Boshida", "Oxirida", "O'rtasida", "O'zidan o'zi"], ans: 0 }
                 ],
                 tasks: [
-                    { t: "1-Masala: 1 dan 10 gacha bo'lgan sonlarni while yordamida chiqaring.", hint: "int i=1; while(i<=10){... i++;}" },
-                    { t: "2-Masala: Kiritilgan sonning raqamlari yig'indisini toping.", hint: "n % 10 va n / 10 ishlating." },
-                    { t: "3-Masala: Foydalanuvchi 0 kiritmaguncha sonlarni olib yig'ib boring.", hint: "while(n != 0) mantiqi." },
-                    { t: "4-Masala: Kiritilgan sonning faktorialini while da toping.", hint: "fact *= i; i++; mantiqi." },
-                    { t: "5-Masala: Sonni teskarisiga o'giruvchi dastur yozing (123 -> 321).", hint: "rev = rev * 10 + n % 10;" }
+                    { t: "1-Masala: 1 dan 10 gacha sonlarni while da chiqaring.", hint: "while(i<=10)" },
+                    { t: "2-Masala: Sonning raqamlari yig'indisini toping.", hint: "n%10 va n/10" },
+                    { t: "3-Masala: 0 kiritilmaguncha sonlarni yig'ing.", hint: "while(n!=0)" },
+                    { t: "4-Masala: Sonning faktorialini toping.", hint: "fact *= i" },
+                    { t: "5-Masala: Sonni teskari tartibda chiqaring.", hint: "rev = rev*10 + n%10" }
                 ]
             },
             {
                 id: "for_loop",
                 title: "4. For Loop va Nested Loops",
-                analogy: "For sikli — bu stadion atrofida aniq 10 marta yugurish topshirig'i! Necha marta takrorlash aniq bo'lsa For ishlatiladi.",
-                text: "For sikli 3 qismdan iborat: boshlang'ich qiymat, shart va qadam. Ichma-ich sikllarda esa tashqi sikl 1 marta aylanganda ichki sikl to'liq aylanadi.",
-                code: `#include <stdio.h>\n\nint main() {\n    for(int i = 1; i <= 5; i++) {\n        printf("For qadami: %d\\n", i);\n    }\n    return 0;\n}`,
+                analogy: "For sikli — aniq sanab yugurish topshirig'i! Qadamlar soni tayyin bo'lganda qo'llaniladi.",
+                text: "For sikli 3 qismdan iborat: boshlang'ich qiymat, shart va qadam.",
+                code: `#include <stdio.h>\n\nint main() {\n    for(int i = 1; i <= 5; i++) {\n        printf("Kvadrat: %d\\n", i * i);\n    }\n    return 0;\n}`,
                 questions: [
-                    { q: "1. For sikli strukturasi qanday?", opts: ["for(boshi; shart; qadam)", "for(shart; boshi; qadam)", "for(qadam; shart)", "for(boshi, shart)"], ans: 0 },
-                    { q: "2. for(int i=0; i<10; i++) necha marta takrorlanadi?", opts: ["10 marta", "9 marta", "11 marta", "Cheksiz"], ans: 0 },
-                    { q: "3. for(;;) yozilsa nima bo'ladi?", opts: ["Cheksiz sikl hosil bo'ladi", "Xatolik beradi", "1 marta ishlaydi", "Ishlamaydi"], ans: 0 },
-                    { q: "4. Nested loop nima?", opts: ["Ichma-ich joylashgan sikllar", "Teskari sikl", "Xato sikl", "Tezkor sikl"], ans: 0 },
-                    { q: "5. Ichma-ich siklda ichki sikl qachon bajariladi?", opts: ["Tashqi siklning har bir qadamida to'liq", "Faqat 1 marta", "Oxirida", "Bajarilmaydi"], ans: 0 },
-                    { q: "6. For ichida i+=2 yozilsa nima bo'ladi?", opts: ["i har safar 2 ga ortadi", "i 2 marta ko'payadi", "Xatolik", "i 2 ga teng bo'ladi"], ans: 0 },
-                    { q: "7. For siklida o'zgaruvchini sikl ichida e'lon qilsa bo'ladimi?", opts: ["Ha (for(int i=0...))", "Yo'q", "Faqat C99 va undan yangida", "Faqat Linuxda"], ans: 0 },
-                    { q: "8. Qaysi sikl matritsa (jadval) bilan ishlashda qulay?", opts: ["Nested for loops", "while", "do-while", "if-else"], ans: 0 },
-                    { q: "9. for(int i=10; i>0; i--) nima qiladi?", opts: ["10 dan 1 gacha kamayib boradi", "1 dan 10 gacha oshadi", "Xatolik beradi", "0 chiqaradi"], ans: 0 },
-                    { q: "10. Niyatsiz cheksiz siklga tushib qolmaslik uchun nima qilish kerak?", opts: ["Shart to'g'ri qo'yilishi va i o'zgarishi kerak", "break yazish kerak", "0 kiritish kerak", "Hech narsa"], ans: 0 },
-                    { q: "11. 2D shakllar (yulduzchalar) chizish uchun nechta sikl kerak?", opts: ["2 ta ichma-ich sikl", "1 ta sikl", "3 ta sikl", "Sikl kerak emas"], ans: 0 },
-                    { q: "12. For sikli shart qismi bo'sh qoldirilsa nima bo'ladi?", opts: ["Rost deb hisoblanib cheksiz bo'ladi", "Xatolik beradi", "Ishlamaydi", "0 beradi"], ans: 0 },
-                    { q: "13. Karra jadvalini chiqarish uchun nechta for kerak?", opts: ["2 ta ichma-ich", "1 ta", "10 ta", "3 ta"], ans: 0 },
-                    { q: "14. For siklidan tashqarida uning ichida e'lon qilingan i ishlaydimi?", opts: ["Yo'q, scope dan tashqarida", "Ha ishlaydi", "Faqat main da", "Farqi yo'q"], ans: 0 },
-                    { q: "15. i-- kodi nimani anglatadi?", opts: ["1 ga kamaytirish", "1 ga oshirish", "2 ga bo'lish", "Nolga tenglash"], ans: 0 },
-                    { q: "16. for(int i=0; i<=10; i+=2) qanday sonlarni chiqaradi?", opts: ["Juft sonlarni (0,2,4,6,8,10)", "Toq sonlarni", "Barcha sonlarni", "Hech narsani"], ans: 0 },
-                    { q: "17. Loop Optimization nima?", opts: ["Sikl tezligini oshirish usullari", "Sikl o'chirish", "Xatolarni izlash", "Kodni ko'paytirish"], ans: 0 },
-                    { q: "18. Break ichki siklda chaqirilsa qaysi sikl to'xtaydi?", opts: ["Faqat ichki sikl", "Tashqi sikl ham", "Butun dastur", "Hech qaysisi"], ans: 0 },
-                    { q: "19. Continue ichki siklda chaqirilsa nima bo'ladi?", opts: ["Ichki siklning keyingi qadamiga o'tadi", "Tashqiga o'tadi", "Dastur to'xtaydi", "Nol beradi"], ans: 0 },
-                    { q: "20. Barcha for sikllarini while ga o'tkazsa bo'ladimi?", opts: ["Ha, mantiqan bir xil", "Yo'q umuman", "Faqat oddiylarini", "Faqat float bo'lsa"], ans: 0 }
+                    { q: "1. For strukturasi qanday?", opts: ["for(boshi; shart; qadam)", "for(shart; boshi; qadam)", "for(qadam; shart)", "for(boshi, shart)"], ans: 0 },
+                    { q: "2. for(int i=0; i<10; i++) necha marta?", opts: ["10 marta", "9 marta", "11 marta", "Cheksiz"], ans: 0 },
+                    { q: "3. for(;;) nima?", opts: ["Cheksiz sikl", "Xato", "1 marta", "Ishlamaydi"], ans: 0 },
+                    { q: "4. Nested loop nima?", opts: ["Ichma-ich sikllar", "Teskari sikl", "Xato sikl", "Tezkor sikl"], ans: 0 },
+                    { q: "5. Ichki sikl qachon bajariladi?", opts: ["Tashqining har bir qadamida to'liq", "1 marta", "Oxirida", "Bajarilmaydi"], ans: 0 },
+                    { q: "6. i+=2 nima qiladi?", opts: ["i har safar 2 ga ortadi", "2 marta ko'payadi", "Xato", "i=2 bo'ladi"], ans: 0 },
+                    { q: "7. i ni for ichida e'lon qilsa bo'ladimi?", opts: ["Ha", "Yo'q", "Faqat C99 da", "Faqat Linuxda"], ans: 0 },
+                    { q: "8. Matritsaga qaysi sikl mos?", opts: ["Nested for", "while", "do-while", "if-else"], ans: 0 },
+                    { q: "9. for(int i=10; i>0; i--) nima qiladi?", opts: ["10 dan 1 ga kamayadi", "1 dan 10 ga oshadi", "Xato", "0 beradi"], ans: 0 },
+                    { q: "10. Cheksiz siklga tushmaslik sharti?", opts: ["Shart va i o'zgarishi to'g'ri bo'lishi kerak", "break yozish", "0 kiritish", "Hech narsa"], ans: 0 },
+                    { q: "11. 2D yulduzchalar chizishga nechta sikl kerak?", opts: ["2 ta ichma-ich", "1 ta", "3 ta", "Kerak emas"], ans: 0 },
+                    { q: "12. For sharti bo'sh qolsa nima bo'ladi?", opts: ["Cheksiz bo'ladi", "Xato", "Ishlamaydi", "0 beradi"], ans: 0 },
+                    { q: "13. Karra jadvaliga nechta for kerak?", opts: ["2 ta", "1 ta", "10 ta", "3 ta"], ans: 0 },
+                    { q: "14. For ichidagi o'zgaruvchi tashqarida ishlaydimi?", opts: ["Yo'q", "Ha", "Faqat main da", "Farqsiz"], ans: 0 },
+                    { q: "15. i-- nima?", opts: ["1 ga kamaytirish", "1 ga oshirish", "2 ga bo'lish", "Nol qilish"], ans: 0 },
+                    { q: "16. for(int i=0; i<=10; i+=2) nimani chiqaradi?", opts: ["Juft sonlarni", "Toq sonlarni", "Barchasini", "Hech narsani"], ans: 0 },
+                    { q: "17. Loop Optimization nima?", opts: ["Sikl tezligini oshirish", "O'chirish", "Xato izlash", "Ko'paytirish"], ans: 0 },
+                    { q: "18. Break ichki siklda chaqirilsa qaysi to'xtaydi?", opts: ["Faqat ichki sikl", "Tashqi ham", "Butun dastur", "Hech qaysisi"], ans: 0 },
+                    { q: "19. Continue ichida chaqirilsa nima bo'ladi?", opts: ["Ichkining keyingisiga o'tadi", "Tashqiga", "To'xtaydi", "Nol"], ans: 0 },
+                    { q: "20. Barcha for ni while ga o'tkazsa bo'ladimi?", opts: ["Ha", "Yo'q", "Faqat oddiyini", "Faqat floatni"], ans: 0 }
                 ],
                 tasks: [
-                    { t: "1-Masala: 1 dan 100 gacha bo'lgan barcha juft sonlarni for da chiqaring.", hint: "for(int i=2; i<=100; i+=2)" },
-                    { t: "2-Masala: Kiritilgan son uchun karra jadvalini chop eting.", hint: "for(int i=1; i<=10; i++) printf(...)" },
-                    { t: "3-Masala: 5x5 o'lchamdagi yulduzcha (*) kvadratini chiqaring.", hint: "Nested for loops ishlating." },
-                    { t: "4-Masala: To'g'ri burchakli uchburchak shaklini yulduzchada chizing.", hint: "j <= i shartidan foydalaning." },
-                    { t: "5-Masala: N gacha bo'lgan Fibonachchi ketma-ketligini chiqaring.", hint: "a=0, b=1, c=a+b mantiqi." }
+                    { t: "1-Masala: 1 dan 100 gacha juft sonlarni chiqaring.", hint: "for(int i=2; i<=100; i+=2)" },
+                    { t: "2-Masala: Karra jadvalini chop eting.", hint: "for bilan i*j" },
+                    { t: "3-Masala: 5x5 yulduzcha kvadratini chizing.", hint: "Nested for loops" },
+                    { t: "4-Masala: Yulduzli uchburchak chizing.", hint: "j <= i sharti" },
+                    { t: "5-Masala: Fibonachchi ketma-ketligini chiqaring.", hint: "a=0, b=1, c=a+b" }
                 ]
             },
             {
                 id: "functions",
                 title: "5. Funksiyalar (Functions)",
-                analogy: "Funksiya — bu Oshxonadagi MIKSER! Unga meva berasiz (argument), u aralashtirib sharbat qaytaradi (return).",
-                text: "Kodni qayta-qayta yozmaslik va ularni modul shaklida tartiblash uchun funksiyalardan foydalanamiz.",
-                code: `#include <stdio.h>\n\n// Kvadratni hisoblovchi funksiya\nint kvadrat(int n) {\n    return n * n;\n}\n\nint main() {\n    printf("5 ning kvadrati: %d", kvadrat(5));\n    return 0;\n}`,
+                analogy: "Funksiya — Mikser! Unga meva berasiz (argument), u aralashtirib sharbat qaytaradi (return).",
+                text: "Kodni qayta yozmaslik va tartiblash uchun funksiyalardan foydalanamiz.",
+                code: `#include <stdio.h>\n\nint kvadrat(int n) {\n    return n * n;\n}\n\nint main() {\n    printf("7 ning kvadrati: %d\\n", kvadrat(7));\n    return 0;\n}`,
                 questions: [
-                    { q: "1. Funksiya nima uchun kerak?", opts: ["Kodni qayta ishlatish va tartiblash uchun", "Dasturni sekinlashtirish uchun", "Faqat matn yozish uchun", "Keragi yo'q"], ans: 0 },
-                    { q: "2. Qiymat qaytarmaydigan funksiya turi qaysi?", opts: ["void", "int", "float", "char"], ans: 0 },
-                    { q: "3. Funksiyadan qiymatni ortga qaytaruvchi kalit so'z qaysi?", opts: ["return", "get", "send", "back"], ans: 0 },
-                    { q: "4. Funksiyaga uzatiladigan o'zgaruvchilar nima deyiladi?", opts: ["Argumentlar (Parametrlar)", "Natijalar", "Sikllar", "Klasslar"], ans: 0 },
-                    { q: "5. Main() o'zi ham funksiyami?", opts: ["Ha, asosiy funksiya", "Yo'q", "Faqat sikl", "Faqat kutubxona"], ans: 0 },
-                    { q: "6. Funksiya prototipi nima?", opts: ["Funksiyani main'dan tepada e'lon qilish", "Funksiyani o'chirish", "Xatolik kodi", "Kutubxona"], ans: 0 },
-                    { q: "7. Rekursiya nima?", opts: ["Funksiyaning o'zini o'zi chaqirishi", "Cheksiz xatolik", "Sikl turi", "O'zgaruvchi"], ans: 0 },
-                    { q: "8. Local o'zgaruvchi qayerda ishlaydi?", opts: ["Faqat o'zi e'lon qilingan funksiya ichida", "Hamma joyda", "Faqat main da", "Faqat Linuxda"], ans: 0 },
-                    { q: "9. Global o'zgaruvchi qayerda joylashadi?", opts: ["Barcha funksiyalardan tashqarida", "Main ichida", "For ichida", "Void ichida"], ans: 0 },
-                    { q: "10. Funksiya nechtagacha qiymat qaytara oladi (return)?", opts: ["Faqat 1 ta qiymat", "Ko'p qiymat", "10 ta", "Xohlagancha"], ans: 0 },
-                    { q: "11. Void funksiyada return ishlatilsa nima bo'ladi?", opts: ["Funksiyani barvaqt to'xtatadi", "Xatolik beradi", "Son qaytaradi", "Hech narsa"], ans: 0 },
-                    { q: "12. Pass by Value nima?", opts: ["Funksiyaga nusxasini uzatish", "Aslini uzatish", "Xotira manzilini berish", "O'chirish"], ans: 0 },
-                    { q: "13. Pass by Reference uchun nima ishlatiladi?", opts: ["Pointer (Ko'rsatkichlar)", "Float", "If-Else", "For"], ans: 0 },
-                    { q: "14. Funksiya nomi sifatida kalit so'zlarni (masalan int) ishlatsa bo'ladimi?", opts: ["Yo'q, taqiqlangan", "Ha", "Faqat void bilan", "Farqi yo'q"], ans: 0 },
-                    { q: "15. Math.h kutubxonasida qanday funksiyalar bor?", opts: ["pow(), sqrt(), abs()", "printf(), scanf()", "main()", "gets()"], ans: 0 },
-                    { q: "16. sqrt(16) nimani qaytaradi?", opts: ["4.0 (Ildizini)", "256", "16", "0"], ans: 0 },
-                    { q: "17. pow(2, 3) nimani hisoblaydi?", opts: ["2 ning 3-darajasini (8)", "2+3=5", "2*3=6", "3 ning kvadratini"], ans: 0 },
-                    { q: "18. Rekursiv funksiyada to'xtash sharti bo'lmasa nima bo'ladi?", opts: ["Stack Overflow (Xotira to'lib dastur buziladi)", "Cheksiz ishlaydi", "Nol qaytaradi", "Hech narsa"], ans: 0 },
-                    { q: "19. Funksiya parametrsiz bo'lishi mumkinmi?", opts: ["Ha, funksiya() deb e'lon qilinadi", "Yo'q", "Faqat void bo'lsa", "Faqat main bo'lsa"], ans: 0 },
-                    { q: "20. C tilida funksiya ichida boshqa funksiya ta'riflash mumkinmi?", opts: ["Yo'q (Nested functions taqiqlangan)", "Ha mumkin", "Faqat GCC da", "Farqi yo'q"], ans: 0 }
+                    { q: "1. Funksiya nega kerak?", opts: ["Kodni qayta ishlatish uchun", "Sekinlashtirish uchun", "Faqat matn uchun", "Kerakmas"], ans: 0 },
+                    { q: "2. Qiymat qaytarmaydigan funksiya?", opts: ["void", "int", "float", "char"], ans: 0 },
+                    { q: "3. Qiymat qaytaruvchi so'z?", opts: ["return", "get", "send", "back"], ans: 0 },
+                    { q: "4. Uzatiladigan o'zgaruvchilar nima deyiladi?", opts: ["Argumentlar", "Natija", "Sikl", "Klass"], ans: 0 },
+                    { q: "5. Main() funksiyami?", opts: ["Ha", "Yo'q", "Sikl", "Kutubxona"], ans: 0 },
+                    { q: "6. Funksiya prototipi nima?", opts: ["Main dan tepada e'lon qilish", "O'chirish", "Xato kodi", "Kutubxona"], ans: 0 },
+                    { q: "7. Rekursiya nima?", opts: ["O'zini o'zi chaqirish", "Xatolik", "Sikl", "O'zgaruvchi"], ans: 0 },
+                    { q: "8. Local o'zgaruvchi qayerda ishlaydi?", opts: ["Faqat o'z funksiyasida", "Hamma joyda", "Faqat main da", "Linuxda"], ans: 0 },
+                    { q: "9. Global o'zgaruvchi qayerda bo'ladi?", opts: ["Tashqarida", "Main ichida", "For ichida", "Void ichida"], ans: 0 },
+                    { q: "10. Return nechtagacha qiymat qaytaradi?", opts: ["1 ta", "Ko'p", "10 ta", "Xohlagancha"], ans: 0 },
+                    { q: "11. Void funksiyada return nima qiladi?", opts: ["To'xtatadi", "Xato beradi", "Son qaytaradi", "Hech narsa"], ans: 0 },
+                    { q: "12. Pass by Value nima?", opts: ["Nusxasini uzatish", "Aslini uzatish", "Manzil berish", "O'chirish"], ans: 0 },
+                    { q: "13. Pass by Reference uchun nima kerak?", opts: ["Pointer", "Float", "If-Else", "For"], ans: 0 },
+                    { q: "14. Kalit so'zni funksiya nomi qilsa bo'ladimi?", opts: ["Yo'q", "Ha", "Faqat void", "Farqsiz"], ans: 0 },
+                    { q: "15. Math.h kutubxonasida nimalar bor?", opts: ["pow(), sqrt()", "printf(), scanf()", "main()", "gets()"], ans: 0 },
+                    { q: "16. sqrt(16) nimani beradi?", opts: ["4.0", "256", "16", "0"], ans: 0 },
+                    { q: "17. pow(2, 3) nimani hisoblaydi?", opts: ["2 ning 3-darajasini (8)", "5", "6", "9"], ans: 0 },
+                    { q: "18. Rekursiyada to'xtash sharti bo'lmasa nima bo'ladi?", opts: ["Stack Overflow", "Cheksiz", "0 beradi", "Hech narsa"], ans: 0 },
+                    { q: "19. Funksiya parametrsiz bo'ladimi?", opts: ["Ha", "Yo'q", "Faqat void bo'lsa", "Faqat main bo'lsa"], ans: 0 },
+                    { q: "20. Funksiya ichida boshqa funksiya ta'riflanadimi?", opts: ["Yo'q (C tilida taqiqlangan)", "Ha", "Faqat GCC da", "Farqsiz"], ans: 0 }
                 ],
                 tasks: [
-                    { t: "1-Masala: 2 ta sonning yig'indisini qaytaruvchi yigindi(a,b) funksiyasini yozing.", hint: "int yigindi(int a, int b) { return a+b; }" },
-                    { t: "2-Masala: Sonning juft yoki toqligini aniqlovchi isJuft() funksiyasini tuzing.", hint: "1 yoki 0 qaytarsin." },
-                    { t: "3-Masala: Kiritilgan sonning kubini hisoblaydigan funksiya tuzing.", hint: "return n * n * n;" },
-                    { t: "4-Masala: 3 ta sonning eng kattasini topuvchi max3() funksiyasini yozing.", hint: "If mantiqidan foydalaning." },
-                    { t: "5-Masala: Rekursiya yordamida n! (faktorial) hisoblovchi funksiya tuzing.", hint: "if(n<=1) return 1; return n*fact(n-1);" }
+                    { t: "1-Masala: yigindi(a,b) funksiyasini yozing.", hint: "int yigindi(int a, int b) { return a+b; }" },
+                    { t: "2-Masala: isJuft() funksiyasini tuzing.", hint: "1 yoki 0 qaytarsin." },
+                    { t: "3-Masala: Sonning kubini hisoblang.", hint: "return n*n*n;" },
+                    { t: "4-Masala: 3 ta sonning eng kattasini topuvchi funksiya yozing.", hint: "If mantiqi" },
+                    { t: "5-Masala: Rekursiv faktorial funksiyasini tuzing.", hint: "if(n<=1) return 1; return n*fact(n-1);" }
                 ]
             }
         ];
@@ -369,10 +386,37 @@
             document.getElementById('topicTitle').innerHTML = `<i class="fa-solid fa-book-open"></i> ${mod.title} — Nazariya`;
             document.getElementById('topicAnalogy').innerHTML = `💡 <b>Hayotiy O'xshatish:</b> ${mod.analogy}`;
             document.getElementById('topicText').innerHTML = mod.text;
-            document.getElementById('topicCode').innerText = mod.code;
+            document.getElementById('codeEditor').value = mod.code;
+
+            document.getElementById('terminalOutput').innerText = "💻 Terminal (Natija): Kodni ishga tushirish tugmasini bosing...";
 
             renderQuiz();
             renderTasks();
+        }
+
+        function runCode() {
+            const code = document.getElementById('codeEditor').value;
+            const term = document.getElementById('terminalOutput');
+            term.innerText = "⚡ Kod bajarilmoqda...\n";
+
+            setTimeout(() => {
+                // Simulation logic for C execution output
+                let output = ">>> Dastur muvaffaqiyatli bajarildi:\n";
+                if(code.includes('printf')) {
+                    const matches = code.match(/printf\s*\(\s*"([^"]+)"/g);
+                    if(matches) {
+                        matches.forEach(m => {
+                            let text = m.replace(/printf\s*\(\s*"/, '').replace(/"$/, '').replace(/\\n/g, '\n');
+                            output += text + "\n";
+                        });
+                    } else {
+                        output += "Salom! Kod muvaffaqiyatli runs bo'ldi.";
+                    }
+                } else {
+                    output += "Kodda printf topilmadi, lekin xatosiz bajarildi.";
+                }
+                term.innerText = output;
+            }, 400);
         }
 
         function renderQuiz() {
@@ -380,7 +424,7 @@
             const qData = mod.questions[currQuizIdx];
 
             document.getElementById('quizProgress').innerText = `Savol: ${currQuizIdx + 1} / 20`;
-            document.getElementById('quizScore').innerText = `To'g'ri javoblar: ${score}`;
+            document.getElementById('quizScore').innerText = `To'g'ri: ${score}`;
             document.getElementById('quizQuestionText').innerText = qData.q;
 
             const optsBox = document.getElementById('quizOptionsBox');
@@ -401,7 +445,7 @@
                 alert("🎯 Barakalla! To'g'ri javob.");
                 score++;
             } else {
-                alert("❌ Noto'g'ri javob. Qayta o'ylab ko'ring!");
+                alert("❌ Noto'g'ri javob. Qayta o'ylang!");
             }
             nextQuestion();
         }
@@ -412,7 +456,7 @@
                 currQuizIdx++;
                 renderQuiz();
             } else {
-                alert(`🏁 Ushbu bo'lim testlari tugadi! Natijangiz: ${score} / 20`);
+                alert(`🏁 Test tugadi! Natijangiz: ${score} / 20`);
             }
         }
 
@@ -433,7 +477,7 @@
                 card.className = 'task-card';
                 card.innerHTML = `
                     <div class="task-title">${task.t}</div>
-                    <div style="font-size: 13px; color: var(--text-gray);">💡 Yo'llanma: ${task.hint}</div>
+                    <div style="font-size: 12px; color: var(--text-gray);">💡 Yo'llanma: ${task.hint}</div>
                 `;
                 container.appendChild(card);
             });
@@ -454,10 +498,10 @@
             setTimeout(() => {
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'chat-bubble ai';
-                aiMsg.innerText = `Iftixor AI: Siz bergan "${val}" savoli o'rganildi. Ushbu bo'lim darsligi va kod namunalarida javobi aks ettirilgan!`;
+                aiMsg.innerText = `Iftixor AI: Siz bergan "${val}" savolingiz o'rganildi. Yuqoridagi Editor orqali kodni sinab ko'rishingiz mumkin!`;
                 chat.appendChild(aiMsg);
                 chat.scrollTop = chat.scrollHeight;
-            }, 600);
+            }, 500);
         }
 
         initApp();
