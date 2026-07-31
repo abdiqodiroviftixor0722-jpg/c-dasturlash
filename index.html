@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muhabbat Tenglamasi</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffe6f0 0%, #fff0f5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 16px;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4);
+            text-align: center;
+            max-width: 380px;
+            width: 100%;
+            position: relative;
+        }
+        h1 {
+            color: #ff4d94;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+        .sub-text {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .formula {
+            background: #fff0f6;
+            border: 2px dashed #ff85c0;
+            border-radius: 16px;
+            padding: 12px;
+            color: #c41d7f;
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        .question-box {
+            margin-top: 15px;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .question-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .meme-box {
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        .meme-img {
+            max-height: 100px;
+            max-width: 150px;
+            border-radius: 12px;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            position: relative;
+            min-height: 50px;
+        }
+        .btn-yes {
+            background: #ff4d94;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 77, 148, 0.4);
+            transition: 0.2s;
+            z-index: 5;
+        }
+        .btn-yes:active {
+            transform: scale(0.95);
+        }
+        .btn-no {
+            background: #ff7875;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 120, 117, 0.4);
+            transition: transform 0.2s ease;
+            z-index: 10;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Sen bilan hayotimning eng chiroyli formulasi topildi 💕</h1>
+        <p class="sub-text">
+            Azizim, sen matematika o'qituvchisi bo'lsang ham, yuragimdagi hislarni hech qanday formula to'liq ifodalay olmaydi. Lekin bitta narsa aniq: <b>menga eng to'g'ri yechim — bu sensan.</b>
+        </p>
+
+        <div class="formula">
+            (Men + Sen) = Muhabbatning eng chiroyli natijasi 💕
+        </div>
+
+        <div class="question-box" id="questionBox">
+            <div class="question-title" id="qTitle">Meni ham sevasanmi? 🥰</div>
+            
+            <div class="meme-box" id="memeContainer">
+                <!-- Dastlabki yoqimli GIF -->
+                <img class="meme-img" id="currentMeme" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3d6bWZyMzZndWxsNWhwb2pzeHFjcXMxeXN6M3BxeXRiMmx0Ymw0MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/c6wvfeV2nHiDTJ9Yth/giphy.gif" alt="Cute cat">
+            </div>
+
+            <div class="btn-container" id="btnContainer">
+                <button class="btn-yes" onclick="nextQuestion()">Ha 💕</button>
+                <button class="btn-no" id="runawayBtn" onmouseover="escapeBtn()" ontouchstart="escapeBtn()" onclick="escapeBtn()">Eee yo'q-da 😜</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "Rostdanmi? 🥹",
+            "Aniqmi? Yana bir bor o'ylab ko'r-a! 🤔",
+            "Hazillashmayapsanmi? 🧐",
+            "Bo'ldi, endi orqaga yo'l yo'q! ❤️"
+        ];
+        let step = 0;
+
+        const runawayTexts = [
+            "Eee yo'q-da 😜",
+            "Boshqa o'ylab ko'r! 🤔",
+            "Aldamagin eeee! 🥺",
+            "Baribir 'Ha' deysan! 😂",
+            "Qochib qutulamaysan! 🏃‍♂️"
+        ];
+        let textIndex = 0;
+
+        // Yig'layotgan memlar to'plami
+        const sadMemes = [
+            "https://media.giphy.com/media/d2lhZ5WA6a06s/giphy.gif",
+            "https://media.giphy.com/media/2wx3MigL1306nLTViH/giphy.gif",
+            "https://media.giphy.com/media/ISOckXU1vnEG4/giphy.gif"
+        ];
+
+        function escapeBtn() {
+            const btn = document.getElementById('runawayBtn');
+            const memeImg = document.getElementById('currentMeme');
+            
+            // Yig'layotgan memni ko'rsatamiz
+            const randomSadMeme = sadMemes[Math.floor(Math.random() * sadMemes.length)];
+            memeImg.src = randomSadMeme;
+
+            // "Ha" tugmasiga xaqiqatan tegmasligi uchun faqat atrofga suramiz
+            // Masalan, -120px dan -50px gacha (chap/o'ng chetlar) va past/buloqlarga
+            const randomX = (Math.random() > 0.5 ? 1 : -1) * (60 + Math.random() * 80);
+            const randomY = (Math.random() - 0.5) * 100;
+
+            btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+
+            textIndex = (textIndex + 1) % runawayTexts.length;
+            btn.innerText = runawayTexts[textIndex];
+        }
+
+        function nextQuestion() {
+            const memeImg = document.getElementById('currentMeme');
+            // Quvnoq memga qaytaramiz
+            memeImg.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3d6bWZyMzZndWxsNWhwb2pzeHFjcXMxeXN6M3BxeXRiMmx0Ymw0MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/c6wvfeV2nHiDTJ9Yth/giphy.gif";
+
+            if (step < questions.length) {
+                document.getElementById('qTitle').innerText = questions[step];
+                step++;
+                
+                // "Yo'q" tugmasini o'z o'rniga qaytaramiz (lekin baribir Ha'ning yonida)
+                const btn = document.getElementById('runawayBtn');
+                btn.style.transform = `translate(0px, 0px)`;
+            } else {
+                showSuccess();
+            }
+        }
+
+        function showSuccess() {
+            const qBox = document.getElementById('questionBox');
+            qBox.innerHTML = `
+                <img class="meme-img" style="max-height: 140px;" src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqNXhkaXRrNjFrOW5sajJ0bHZsd3Bsa3p5ODR5OHdndWJvOWQzciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/TdfyKrN7HGTIY/giphy.gif" alt="Happy meme">
+                <div style="font-size: 24px; margin-top: 10px; margin-bottom: 5px;">🎉</div>
+                <h2 style="color: #ff4d94; margin-bottom: 8px;">MALADES!</h2>
+                <p style="color: #555; font-size: 14.5px;">
+                    Demak, muhabbat tenglamasi muvaffaqiyatli yechildi! ❤️ ✨
+                </p>
+                <button class="btn-yes" onclick="location.reload()" style="margin-top: 10px; font-size: 14px; padding: 6px 16px;">Boshidan boshlash 🔄</button>
+            `;
+        }
+    </script>
+</body>
+</html>
