@@ -2,574 +2,139 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C-Dasturlash: Iftixor Mega Platformasi</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <title>Multi-AI Chat Assistant</title>
     <style>
-        :root {
-            --bg-main: #0f172a;
-            --panel-bg: #1e293b;
-            --card-bg: #334155;
-            --accent-cyan: #38bdf8;
-            --accent-green: #4ade80;
-            --accent-yellow: #facc15;
-            --accent-purple: #c084fc;
-            --text-white: #f8fafc;
-            --text-gray: #94a3b8;
-            --border-color: #475569;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-white); display: flex; height: 100vh; overflow: hidden; }
-
-        /* Left Navigation Sidebar */
-        .sidebar { width: 260px; background-color: var(--panel-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
-        .sidebar-header { padding: 18px; font-size: 16px; font-weight: bold; color: var(--accent-cyan); border-bottom: 1px solid var(--border-color); }
-        .author-badge { font-size: 11px; background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--accent-cyan); margin-top: 4px; display: inline-block; }
-        .topic-list { flex: 1; overflow-y: auto; padding: 10px; }
-        .topic-btn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; color: var(--text-gray); border-radius: 8px; cursor: pointer; margin-bottom: 6px; font-size: 13px; transition: all 0.2s; }
-        .topic-btn:hover { background: rgba(56, 189, 248, 0.1); color: var(--accent-cyan); }
-        .topic-btn.active { background: var(--accent-cyan); color: #0f172a; font-weight: bold; }
-
-        /* Workspace Main */
-        .main-workspace { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .top-navbar { height: 55px; background-color: var(--panel-bg); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
-        
-        /* Layout Structure */
-        .content-area { flex: 1; display: flex; overflow: hidden; }
-        .content-body { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
-
-        /* Editor & Terminal Section */
-        .editor-container { background: #090d16; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
-        .editor-header { background: #1e293b; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
-        .code-input { width: 100%; height: 180px; background: #090d16; color: #7dd3fc; border: none; padding: 15px; font-family: 'Consolas', monospace; font-size: 13.5px; outline: none; resize: none; line-height: 1.5; }
-        .terminal-box { background: #000; border-top: 1px solid var(--border-color); padding: 12px 15px; font-family: 'Consolas', monospace; font-size: 13px; color: var(--accent-green); min-height: 60px; max-height: 100px; overflow-y: auto; }
-
-        /* AI Chat Panel (Right) */
-        .ai-panel { width: 320px; background-color: var(--panel-bg); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; }
-        .ai-header { padding: 14px; font-weight: bold; color: var(--accent-purple); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; font-size: 13.5px; }
-        .chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .chat-bubble { padding: 9px 12px; border-radius: 8px; font-size: 12.5px; line-height: 1.45; max-width: 90%; word-break: break-word; }
-        .chat-bubble.ai { background: var(--card-bg); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-white); }
-        .chat-bubble.user { background: var(--accent-cyan); color: #0f172a; font-weight: 600; align-self: flex-end; }
-        .chat-bubble.loading { font-style: italic; color: var(--accent-yellow); }
-        .chat-input-box { padding: 10px; border-top: 1px solid var(--border-color); display: flex; gap: 6px; }
-        .chat-input-box input { flex: 1; background: var(--bg-main); border: 1px solid var(--border-color); padding: 8px 10px; border-radius: 6px; color: var(--text-white); outline: none; font-size: 12px; }
-
-        /* Cards */
-        .card { background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 18px; }
-        .card-title { font-size: 16px; color: var(--accent-cyan); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-        .simple-text { font-size: 13.5px; line-height: 1.6; color: var(--text-white); margin-bottom: 12px; }
-        .analogy-box { background: rgba(250, 204, 21, 0.1); border-left: 4px solid var(--accent-yellow); padding: 10px; border-radius: 0 6px 6px 0; font-size: 13px; color: #fef08a; margin-bottom: 12px; }
-
-        /* Quiz & Tasks */
-        .quiz-container { background: var(--card-bg); border-radius: 8px; padding: 14px; margin-top: 8px; }
-        .quiz-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px; color: var(--accent-yellow); font-size: 12.5px; }
-        .option-btn { display: block; width: 100%; text-align: left; padding: 9px 12px; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-white); border-radius: 6px; margin-bottom: 6px; cursor: pointer; font-size: 12.5px; transition: 0.2s; }
-        .option-btn:hover { border-color: var(--accent-cyan); background: rgba(56, 189, 248, 0.05); }
-
-        .task-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; margin-bottom: 8px; font-size: 13px; }
-        .task-title { font-weight: bold; color: var(--accent-green); margin-bottom: 4px; }
-
-        .btn { padding: 6px 14px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
-        .btn-cyan { background: var(--accent-cyan); color: #0f172a; }
-        .btn-green { background: var(--accent-green); color: #0f172a; }
-        .btn-purple { background: var(--accent-purple); color: #0f172a; }
-        .btn-gray { background: var(--card-bg); color: var(--text-white); }
+        body { font-family: Arial, sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
+        .chat-container { width: 100%; max-width: 600px; background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px; }
+        .controls { display: flex; gap: 10px; margin-bottom: 15px; }
+        select, input, button { padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
+        select { background: #eef2f7; font-weight: bold; cursor: pointer; }
+        .chat-box { height: 350px; overflow-y: auto; border: 1px solid #eee; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px 14px; border-radius: 8px; max-width: 80%; line-height: 1.4; }
+        .user { background: #007bff; color: white; align-self: flex-end; }
+        .ai { background: #e9ecef; color: #333; align-self: flex-start; }
+        .input-area { display: flex; gap: 10px; }
+        .input-area input { flex: 1; }
+        .input-area button { background: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; }
+        .input-area button:hover { background: #218838; }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar Menu -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <div>
-                <i class="fa-solid fa-code"></i> C-Pro Studio
-                <div><span class="author-badge">Muallif: Iftixor Abdiqodirov</span></div>
-            </div>
-        </div>
-        <div class="topic-list" id="topicMenu"></div>
+<div class="chat-container">
+    <h2>🤖 Multi-AI Yordamchi Tizim</h2>
+    
+    <!-- AI Tanlash Bo'limi -->
+    <div class="controls">
+        <label for="aiModel" style="align-self:center; font-weight:bold;">AI Model:</label>
+        <select id="aiModel">
+            <option value="gemini">Google Gemini (Tavsiya etiladi)</option>
+            <option value="groq">Groq / Llama 3 (Juda Tezkor)</option>
+            <option value="pollinations">Pollinations AI (Kalitsiz & Tekin)</option>
+        </select>
     </div>
 
-    <!-- Main Workspace -->
-    <div class="main-workspace">
-        <div class="top-navbar">
-            <span style="font-size: 13.5px; font-weight: 600; color: var(--text-gray);" id="currentCategoryTitle">Mavzu...</span>
-            <span style="background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 4px 10px; border-radius: 20px; font-size: 11.5px; font-weight: bold;">
-                <i class="fa-solid fa-code-branch"></i> Creator: Iftixor
-            </span>
-        </div>
-
-        <div class="content-area">
-            <!-- Center Content -->
-            <div class="content-body">
-                
-                <!-- 1. Nazariya -->
-                <div class="card">
-                    <div class="card-title" id="topicTitle"><i class="fa-solid fa-book-open"></i> Mavzu Nazariyasi</div>
-                    <div class="analogy-box" id="topicAnalogy">💡 Tushuntirish...</div>
-                    <div class="simple-text" id="topicText">Darslik matni...</div>
-                </div>
-
-                <!-- 2. Interactive Code Editor -->
-                <div class="card">
-                    <div class="card-title"><i class="fa-solid fa-terminal"></i> Interaktiv C Kod Tahrirlagich</div>
-                    <div class="editor-container">
-                        <div class="editor-header">
-                            <span style="font-size: 12px; color: var(--text-gray);"><i class="fa-solid fa-file-code"></i> main.c</span>
-                            <button class="btn btn-green" onclick="runCode()"><i class="fa-solid fa-play"></i> Kodni Ishga Tushirish</button>
-                        </div>
-                        <textarea id="codeEditor" class="code-input" spellcheck="false"></textarea>
-                        <div class="terminal-box" id="terminalOutput">💻 Terminal (Natija): Kodni ishga tushirish tugmasini bosing...</div>
-                    </div>
-                </div>
-
-                <!-- 3. Test (20 ta Savol) -->
-                <div class="card">
-                    <div class="card-title"><i class="fa-solid fa-circle-question"></i> Bilimni Tekshirish Testlari (20 ta Savol)</div>
-                    <div class="quiz-container">
-                        <div class="quiz-header">
-                            <span id="quizProgress">Savol: 1 / 20</span>
-                            <span id="quizScore" style="color: var(--accent-green);">To'g'ri: 0</span>
-                        </div>
-                        <div class="simple-text" id="quizQuestionText" style="font-weight: 600;">Savol...</div>
-                        <div id="quizOptionsBox"></div>
-                        
-                        <div style="display: flex; justify-content: space-between; margin-top: 10px;">
-                            <button class="btn btn-gray" onclick="prevQuestion()"><i class="fa-solid fa-chevron-left"></i> Oldingi</button>
-                            <button class="btn btn-cyan" onclick="nextQuestion()">Keyingi <i class="fa-solid fa-chevron-right"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. Amaliy Masalalar -->
-                <div class="card">
-                    <div class="card-title"><i class="fa-solid fa-list-check"></i> Amaliy Topshiriqlar (5 ta Masala)</div>
-                    <div id="tasksContainer"></div>
-                </div>
-
-            </div>
-
-            <!-- AI Tutor Chat Panel (Right Side) -->
-            <div class="ai-panel">
-                <div class="ai-header">
-                    <span><i class="fa-solid fa-brain"></i> Iftixor Smart AI</span>
-                    <span style="font-size: 10px; background: rgba(74, 222, 128, 0.2); color: var(--accent-green); padding: 2px 6px; border-radius: 4px;">Gemini-Pro</span>
-                </div>
-                <div class="chat-messages" id="chatArea">
-                    <div class="chat-bubble ai">
-                        Salom! Men Iftixor platformasidagi aqlli AI yordamchisiman. Dasturlash, matematika, fizika yoki istalgan boshqa mavzuda savol bering!
-                    </div>
-                </div>
-                <div class="chat-input-box">
-                    <input type="text" id="aiInput" placeholder="Har qanday mavzuda savol bering..." onkeypress="if(event.key==='Enter') askAI()">
-                    <button class="btn btn-purple" onclick="askAI()"><i class="fa-solid fa-paper-plane"></i></button>
-                </div>
-            </div>
-        </div>
+    <!-- Chat Oynasi -->
+    <div class="chat-box" id="chatBox">
+        <div class="msg ai">Salom! O'zingizga ma'qul AI modelini tanlang va savolingizni bering.</div>
     </div>
 
-    <script>
-        // --- Gemini Free AI Integration ---
-        // Bu joyga Google AI Studio'dan olingan tekin API Kalitingizni qo'yishingiz mumkin
-        const GEMINI_API_KEY = ""; 
+    <!-- Savol Yuborish Formasi -->
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Savolingizni yozing..." onkeydown="if(event.key === 'Enter') sendQuery()">
+        <button onclick="sendQuery()">Yuborish</button>
+    </div>
+</div>
 
-        async function askAI() {
-            const input = document.getElementById('aiInput');
-            const val = input.value.trim();
-            if(!val) return;
+<script>
+// API Kalitlar (Kerakli joyga o'z kalitlaringizni kiriting)
+const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"; // Google AI Studio'dan olinadi
+const GROQ_API_KEY = "YOUR_GROQ_API_KEY";     // console.groq.com'dan olinadi (bepul)
 
-            const chat = document.getElementById('chatArea');
-            
-            // User message
-            const userMsg = document.createElement('div');
-            userMsg.className = 'chat-bubble user';
-            userMsg.innerText = val;
-            chat.appendChild(userMsg);
-            input.value = '';
+async function sendQuery() {
+    const input = document.getElementById('userInput');
+    const text = input.value.trim();
+    if (!text) return;
 
-            // Loading state
-            const loadingMsg = document.createElement('div');
-            loadingMsg.className = 'chat-bubble ai loading';
-            loadingMsg.innerText = "⚡ AI o'ylamoqda...";
-            chat.appendChild(loadingMsg);
-            chat.scrollTop = chat.scrollHeight;
+    const selectedAI = document.getElementById('aiModel').value;
+    const chatBox = document.getElementById('chatBox');
 
-            try {
-                let aiResponseText = "";
-                
-                if (GEMINI_API_KEY !== "") {
-                    // Call real Google Gemini API
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            contents: [{
-                                parts: [{ text: `Sen Iftixor Abdiqodirov tomonidan yaratilgan o'quv platformasining aqlli AI yordamchisisan. Foydalanuvchi istalgan mavzuda savol berishi mumkin (C dasturlash, matematika, fizika, umumiy savollar). Har doim samimiy va aniq javob ber. Savol: ${val}` }]
-                            }]
-                        })
-                    });
-                    const data = await response.json();
-                    if(data.candidates && data.candidates[0].content.parts[0].text) {
-                        aiResponseText = data.candidates[0].content.parts[0].text;
-                    } else {
-                        aiResponseText = "Kechirasiz, javob olishda xatolik yuz berdi.";
-                    }
-                } else {
-                    // Smart Offline Fallback Engine (API Key bo'lmaganda ham har qanday mavzuga aqlli javob beradi)
-                    await new Promise(r => setTimeout(r, 700));
-                    aiResponseText = generateSmartOfflineResponse(val);
-                }
+    // Foydalanuvchi xabari
+    appendMessage(text, 'user');
+    input.value = '';
 
-                chat.removeChild(loadingMsg);
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'chat-bubble ai';
-                aiMsg.innerText = aiResponseText;
-                chat.appendChild(aiMsg);
+    // Yuklanish holati
+    const loadingMsg = appendMessage(`⏳ ${selectedAI.toUpperCase()} javob tayyorlamoqda...`, 'ai');
 
-            } catch (err) {
-                chat.removeChild(loadingMsg);
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'chat-bubble ai';
-                errorMsg.innerText = "Kechirasiz, tarmoqda ulanish xatosi bo'ldi.";
-                chat.appendChild(errorMsg);
-            }
-            
-            chat.scrollTop = chat.scrollHeight;
+    let responseText = "";
+
+    try {
+        if (selectedAI === "gemini") {
+            responseText = await fetchGemini(text);
+        } else if (selectedAI === "groq") {
+            responseText = await fetchGroq(text);
+        } else if (selectedAI === "pollinations") {
+            responseText = await fetchPollinations(text);
         }
+    } catch (err) {
+        responseText = "❌ Ulanishda xatolik yuz berdi. Iltimos, boshqa AI modelini tanlab ko'ring.";
+    }
 
-        function generateSmartOfflineResponse(query) {
-            const q = query.toLowerCase();
-            
-            if (q.includes("salom") || q.includes("assalomu")) {
-                return "Assalomu alaykum! Men Iftixor platformasidagi sun'iy intellektman. Qanday savolingiz bor?";
-            } else if (q.includes("ism") || q.includes("kimsan") || q.includes("muallif")) {
-                return "Men Iftixor Abdiqodirov tomonidan yaratilgan universal AI yordamchiman!";
-            } else if (q.includes("c ") || q.includes("kod") || q.includes("printf") || q.includes("scanf") || q.includes("dastur")) {
-                return `"${query}" bo'yicha C dasturlash ko'rsatmasi:\nC tilida bu jarayon xotira va sintaksis aniqligini talab qiladi. Chap tomondagi kodingizni tekshiring va natijani ko'rish uchun "Kodni Ishga Tushirish" tugmasini bosing.`;
-            } else if (q.includes("math") || q.includes("hisob") || q.includes("+") || q.includes("*") || q.includes("tenglama") || q.includes("matematika")) {
-                return `Matematik savolingiz: "${query}". Ushbu masalani bosqichma-bosqich yechish uchun formulalardan foydalaniladi. Agar aniq sonli masala bo'lsa, sonlarini ko'rsating!`;
-            } else {
-                return `Sizning "${query}" degan savolingiz qabul qilindi. Ushbu mavzu bo'yicha batafsil ma'lumot olishingiz mumkin. Savolingizni yanada aniqlashtirsangiz, to'liqroq tushuntirib beraman!`;
-            }
-        }
+    // Yuklanish matnini javobga almashtirish
+    loadingMsg.innerText = responseText;
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
 
-        // --- Core Application Logic ---
-        const modules = [
-            {
-                id: "printf_scanf",
-                title: "1. Printf va Scanf",
-                analogy: "printf() — bu kompyuterning OG'ZI (gapiradi). scanf() — bu kompyuterning QULOG'I (eshitib xotiraga yozadi)!",
-                text: "Printf yordamida ekranga yozuv chiqariladi, scanf yordamida esa foydalanuvchidan ma'lumot olinadi.",
-                code: `#include <stdio.h>\n\nint main() {\n    printf("Salom Iftixor platformasiga xush kelibsiz!\\n");\n    int yosh = 15;\n    printf("Sizning yoshingiz: %d\\n", yosh);\n    return 0;\n}`,
-                questions: [
-                    { q: "1. Printf() funksiyasining vazifasi nima?", opts: ["Sonlarni qo'shadi", "Ekranga ma'lumot chiqaradi", "Klaviatura kiritadi", "Kodni o'chiradi"], ans: 1 },
-                    { q: "2. Scanf() da & belgisi nega kerak?", opts: ["Ko'rinish uchun", "Xotira manzilini ko'rsatish uchun", "Ko'paytirish uchun", "Xatoni berkitish"], ans: 1 },
-                    { q: "3. Int turini chiqarish formati qaysi?", opts: ["%f", "%c", "%d", "%s"], ans: 2 },
-                    { q: "4. Float (kasr) sonlar kiritish formati qaysi?", opts: ["%d", "%f", "%c", "%i"], ans: 1 },
-                    { q: "5. Bitta belgi (char) formati qaysi?", opts: ["%c", "%d", "%f", "%s"], ans: 0 },
-                    { q: "6. Yangi qatorga o'tish kodi qaysi?", opts: ["\\t", "\\n", "\\a", "\\b"], ans: 1 },
-                    { q: "7. Scanf(\"%d\", a); nimasi xato?", opts: ["%d xato", "& tushib qolgan", "printf bo'lishi kerak", "Xatosiz"], ans: 1 },
-                    { q: "8. Header fayl ulash buyrug'i qaysi?", opts: ["#import", "#include <stdio.h>", "#use", "using"], ans: 1 },
-                    { q: "9. C da buyruqlar oxiriga nima qo'yiladi?", opts: ["Nuqta (.)", "Vergul (,)", "Nuqtali vergul (;)", "Ikki nuqta"], ans: 2 },
-                    { q: "10. Main() nimani qaytaradi?", opts: ["return 1;", "return 0;", "return -1;", "void"], ans: 1 },
-                    { q: "11. %.2f nimani anglatadi?", opts: ["2 ta son", "Kasrning 2 xonagacha aniqligi", "2 marta ko'paytirish", "2-qator"], ans: 1 },
-                    { q: "12. Scanf bilan bir nechta o'zgaruvchi olsa bo'ladimi?", opts: ["Yo'q", "Ha, scanf(\"%d %d\", &a, &b);", "Faqat float", "10 tagacha"], ans: 1 },
-                    { q: "13. Stdio.h kengaytmasi nima?", opts: ["Standard Input Output Header", "Studio C", "Static Data", "Standard Text"], ans: 0 },
-                    { q: "14. Matnlar formati qaysi?", opts: ["%d", "%f", "%s", "%c"], ans: 2 },
-                    { q: "15. Printf(\"10 + 20\") nima chiqaradi?", opts: ["30", "10 + 20", "Xatolik", "0"], ans: 1 },
-                    { q: "16. Sonlar orasida probel bo'lishi shartmi?", opts: ["Ha", "Yo'q", "Faqat nuqta", "Xato beradi"], ans: 0 },
-                    { q: "17. Printf ichida % chiqarish kodi qaysi?", opts: ["\\%", "%%", "&%", "#%"], ans: 1 },
-                    { q: "18. Scanf probelli matnni to'liq o'qiydimi?", opts: ["Ha", "Yo'q, gets qulay", "Farqi yo'q", "Ishlamaydi"], ans: 1 },
-                    { q: "19. Int a, b; scanf(\"%d\", &a); b ga qiymat beradimi?", opts: ["Ha", "Yo'q, axlat qiymat", "b=0", "To'xtaydi"], ans: 1 },
-                    { q: "20. C dasturining kirish nuqtasi qaysi?", opts: ["printf()", "scanf()", "main()", "start()"], ans: 2 }
-                ],
-                tasks: [
-                    { t: "1-Masala: Ekranga o'zingizning ismingiz va yoshingizni chiqaring.", hint: "printf(\"Ismim: A, Yoshim: B\");" },
-                    { t: "2-Masala: 2 ta sonning ko'paytmasini chiqaring.", hint: "scanf bilan a, b olib a*b chiqaring." },
-                    { t: "3-Masala: Doira yuzini hisoblang (S = 3.14 * r * r).", hint: "Float turini ishlating." },
-                    { t: "4-Masala: Haroratni Selsiydan Farengeytga o'tkazing.", hint: "F = C * 1.8 + 32 formulasi." },
-                    { t: "5-Masala: 3 ta sonning o'rta arifmetigini toping.", hint: "(a + b + c) / 3.0" }
-                ]
-            },
-            {
-                id: "if_else",
-                title: "2. If / Else Shartlari",
-                analogy: "If/Else — bu Chorrahadagi svetofor! Qizil yonsa — to'xtaysiz, aks holda (else) — yurasiz.",
-                text: "Mantiqiy shartlar yordamida dastur yo'nalishini o'zgartirishimiz mumkin.",
-                code: `#include <stdio.h>\n\nint main() {\n    int ball = 85;\n    if (ball >= 60) {\n        printf("A'lo! Siz imtihondan o'tdingiz.\\n");\n    } else {\n        printf("Yiqildingiz.\\n");\n    }\n    return 0;\n}`,
-                questions: [
-                    { q: "1. If kodi qachon bajariladi?", opts: ["Shart rost bo'lsa", "Shart yolg'on bo'lsa", "Doim", "Hech qachon"], ans: 0 },
-                    { q: "2. Tenglik operatori qaysi?", opts: ["=", "==", "===", "!="], ans: 1 },
-                    { q: "3. Teng emaslik operatori qaysi?", opts: ["<>", "!=", "=/=", "NOT"], ans: 1 },
-                    { q: "4. Else qachon ishlaydi?", opts: ["If to'g'ri bo'lsa", "If noto'g'ri bo'lsa", "Har doim", "Faqat bir marta"], ans: 1 },
-                    { q: "5. Mantiqiy 'VA' (AND) operatori qaysi?", opts: ["||", "&&", "!", "&"], ans: 1 },
-                    { q: "6. Mantiqiy 'YOKI' (OR) operatori qaysi?", opts: ["&&", "||", "!", "|"], ans: 1 },
-                    { q: "7. Ketma-ket shartlar uchun qaysi bir ishlatiladi?", opts: ["else if", "if else", "loop", "switch"], ans: 0 },
-                    { q: "8. if (a = 5) nima qiladi?", opts: ["Tenglikni tekshiradi", "a ga 5 biriktirib rost bo'ladi", "Xato beradi", "O'chadi"], ans: 1 },
-                    { q: "9. (5 > 3 && 2 < 1) natijasi nima?", opts: ["1", "0", "Xatolik", "Null"], ans: 1 },
-                    { q: "10. (5 > 3 || 2 < 1) natijasi nima?", opts: ["1", "0", "Xatolik", "Null"], ans: 0 },
-                    { q: "11. Figurali qavssiz {} if nechta buyruqni boshqaradi?", opts: ["1 ta", "Barchasini", "Hech qaysi", "2 ta"], ans: 0 },
-                    { q: "12. Ternary operatori qaysi?", opts: ["? :", "if else", "->", "::"], ans: 0 },
-                    { q: "13. ! operatori vazifasi nima?", opts: ["Inkor qilish (rostni yolg'onga)", "O'zgartirmaslik", "Nol qilish", "To'xtatish"], ans: 0 },
-                    { q: "14. Switch-case if-else o'rnini bosa oladimi?", opts: ["Ha, aniq qiymatlar uchun", "Yo'q", "Faqat matnga", "Faqat floatga"], ans: 0 },
-                    { q: "15. Switch dagi break nega kerak?", opts: ["Keyingi case ga o'tmaslik uchun", "O'chirish uchun", "Xato uchun", "Tsikl uchun"], ans: 0 },
-                    { q: "16. Switch da case tushmasa qayer ishlaydi?", opts: ["default:", "else:", "stop:", "exit:"], ans: 0 },
-                    { q: "17. if (x) qachon ishlaydi?", opts: ["x != 0 bo'lganda", "x = 0 bo'lganda", "x = 1 bo'lganda", "Ishlamaydi"], ans: 0 },
-                    { q: "18. if (0) nima qiladi?", opts: ["Bajarilmaydi", "Bajariladi", "Buziladi", "Cheksiz ishlaydi"], ans: 0 },
-                    { q: "19. Shart noto'g'ri bo'lsa else bo'lishi shartmi?", opts: ["Shart emas", "Shart", "Xato beradi", "Faqat Linuxda"], ans: 0 },
-                    { q: "20. Float sonlarni == bilan tekshirish to'g'rimi?", opts: ["Yo'q, aniqlik xatosi bor", "Ha", "Farqi yo'q", "Tavsiya etiladi"], ans: 0 }
-                ],
-                tasks: [
-                    { t: "1-Masala: Sonning musbat yoki manfiyligini aniqlang.", hint: "if (n > 0) else..." },
-                    { t: "2-Masala: Son 5 va 11 ga bo'linishini tekshiring.", hint: "n%5==0 && n%11==0" },
-                    { t: "3-Masala: 3 ta sonning eng kattasini toping.", hint: "if va && ishlating." },
-                    { t: "4-Masala: Yil kabisa yili ekanligini toping.", hint: "yil % 4 == 0" },
-                    { t: "5-Masala: Kalkulyator dasturini tuzing.", hint: "Switch-case ishlating." }
-                ]
-            },
-            {
-                id: "while_loop",
-                title: "3. While va Do-While Sikli",
-                analogy: "While — 'Oldin shartni tekshirib keyin bajar', Do-While — 'Oldin 1 marta bajarib keyin tekshir'!",
-                text: "Sikl takrorlanishlar soni nomalum bo'lganda ishlatiladi.",
-                code: `#include <stdio.h>\n\nint main() {\n    int count = 1;\n    while(count <= 3) {\n        printf("Takrorlanish qadami: %d\\n", count);\n        count++;\n    }\n    return 0;\n}`,
-                questions: [
-                    { q: "1. While qachon to'xtaydi?", opts: ["Shart 0 bo'lganda", "Shart 1 bo'lganda", "10 da", "Xohlagan payt"], ans: 0 },
-                    { q: "2. Do-while farqi nimada?", opts: ["Kamida 1 marta albatta bajariladi", "Tezroq", "Shart emas", "Farqsiz"], ans: 0 },
-                    { q: "3. while(1) nimani bildiradi?", opts: ["Cheksiz sikl", "1 marta", "Ishlamaydi", "Xato"], ans: 0 },
-                    { q: "4. Siklni to'xtatuvchi kalit so'z?", opts: ["break", "continue", "stop", "exit"], ans: 0 },
-                    { q: "5. Qadamni o'tkazib yuborish sohasi?", opts: ["continue", "break", "skip", "pass"], ans: 0 },
-                    { q: "6. do-while oxirida nima bo'ladi?", opts: ["Nuqtali vergul (;)", "Figurali qavs", "break", "return"], ans: 0 },
-                    { q: "7. i++ nimani bildiradi?", opts: ["i ni 1 ga oshirish", "2 ga ko'paytirish", "Kamaytirish", "Hech narsa"], ans: 0 },
-                    { q: "8. ++i va i++ farqlanadimi?", opts: ["Ha, oshirish tartibida", "Yo'q", "Faqat while da", "Faqat for da"], ans: 0 },
-                    { q: "9. while(0) necha marta ishlaydi?", opts: ["0 marta", "1 marta", "Cheksiz", "Xatolik"], ans: 0 },
-                    { q: "10. do{...} while(0); necha marta ishlaydi?", opts: ["1 marta", "0 marta", "Cheksiz", "Xatolik"], ans: 0 },
-                    { q: "11. i++ qolib ketsa nima bo'ladi?", opts: ["Cheksiz sikl hosil bo'ladi", "To'xtaydi", "Xato beradi", "Nol beradi"], ans: 0 },
-                    { q: "12. While ichida if bo'ladimi?", opts: ["Ha", "Yo'q", "1 marta", "Faqat break bilan"], ans: 0 },
-                    { q: "13. break nimani to'xtatadi?", opts: ["Sikl va switch-case ni", "Faqat main ni", "Faqat if ni", "Kompyuterni"], ans: 0 },
-                    { q: "14. Sikl shartida /= ishlasa bo'ladimi?", opts: ["Ha", "Yo'q", "Faqat float", "Xato"], ans: 0 },
-                    { q: "15. Parol so'rashga qaysi sikl qulay?", opts: ["do-while", "for", "if", "switch"], ans: 0 },
-                    { q: "16. while(a != b) nimani bildiradi?", opts: ["a va b teng bo'lmaguncha ishlaydi", "Teng bo'lsa", "Xato", "Qo'shiladi"], ans: 0 },
-                    { q: "17. Continue pastdagi kodlarni ishlatadimi?", opts: ["Yo'q, keyingisiga o'tadi", "Ha", "To'xtaydi", "O'chadi"], ans: 0 },
-                    { q: "18. Cheksiz sikldan chiqish kaliti?", opts: ["break", "continue", "start", "loop"], ans: 0 },
-                    { q: "19. do-while sharti qayerda tekshiriladi?", opts: ["Oxirida", "Boshida", "O'rtasida", "Tekshirilmaydi"], ans: 0 },
-                    { q: "20. While sharti qayerda tekshiriladi?", opts: ["Boshida", "Oxirida", "O'rtasida", "O'zidan o'zi"], ans: 0 }
-                ],
-                tasks: [
-                    { t: "1-Masala: 1 dan 10 gacha sonlarni while da chiqaring.", hint: "while(i<=10)" },
-                    { t: "2-Masala: Sonning raqamlari yig'indisini toping.", hint: "n%10 va n/10" },
-                    { t: "3-Masala: 0 kiritilmaguncha sonlarni yig'ing.", hint: "while(n!=0)" },
-                    { t: "4-Masala: Sonning faktorialini toping.", hint: "fact *= i" },
-                    { t: "5-Masala: Sonni teskari tartibda chiqaring.", hint: "rev = rev*10 + n%10" }
-                ]
-            },
-            {
-                id: "for_loop",
-                title: "4. For Loop va Nested Loops",
-                analogy: "For sikli — aniq sanab yugurish topshirig'i! Qadamlar soni tayyin bo'lganda qo'llaniladi.",
-                text: "For sikli 3 qismdan iborat: boshlang'ich qiymat, shart va qadam.",
-                code: `#include <stdio.h>\n\nint main() {\n    for(int i = 1; i <= 5; i++) {\n        printf("Kvadrat: %d\\n", i * i);\n    }\n    return 0;\n}`,
-                questions: [
-                    { q: "1. For strukturasi qanday?", opts: ["for(boshi; shart; qadam)", "for(shart; boshi; qadam)", "for(qadam; shart)", "for(boshi, shart)"], ans: 0 },
-                    { q: "2. for(int i=0; i<10; i++) necha marta?", opts: ["10 marta", "9 marta", "11 marta", "Cheksiz"], ans: 0 },
-                    { q: "3. for(;;) nima?", opts: ["Cheksiz sikl", "Xato", "1 marta", "Ishlamaydi"], ans: 0 },
-                    { q: "4. Nested loop nima?", opts: ["Ichma-ich sikllar", "Teskari sikl", "Xato sikl", "Tezkor sikl"], ans: 0 },
-                    { q: "5. Ichki sikl qachon bajariladi?", opts: ["Tashqining har bir qadamida to'liq", "1 marta", "Oxirida", "Bajarilmaydi"], ans: 0 },
-                    { q: "6. i+=2 nima qiladi?", opts: ["i har safar 2 ga ortadi", "2 marta ko'payadi", "Xato", "i=2 bo'ladi"], ans: 0 },
-                    { q: "7. i ni for ichida e'lon qilsa bo'ladimi?", opts: ["Ha", "Yo'q", "Faqat C99 da", "Faqat Linuxda"], ans: 0 },
-                    { q: "8. Matritsaga qaysi sikl mos?", opts: ["Nested for", "while", "do-while", "if-else"], ans: 0 },
-                    { q: "9. for(int i=10; i>0; i--) nima qiladi?", opts: ["10 dan 1 ga kamayadi", "1 dan 10 ga oshadi", "Xato", "0 beradi"], ans: 0 },
-                    { q: "10. Cheksiz siklga tushmaslik sharti?", opts: ["Shart va i o'zgarishi to'g'ri bo'lishi kerak", "break yozish", "0 kiritish", "Hech narsa"], ans: 0 },
-                    { q: "11. 2D yulduzchalar chizishga nechta sikl kerak?", opts: ["2 ta ichma-ich", "1 ta", "3 ta", "Kerak emas"], ans: 0 },
-                    { q: "12. For sharti bo'sh qolsa nima bo'ladi?", opts: ["Cheksiz bo'ladi", "Xato", "Ishlamaydi", "0 beradi"], ans: 0 },
-                    { q: "13. Karra jadvaliga nechta for kerak?", opts: ["2 ta", "1 ta", "10 ta", "3 ta"], ans: 0 },
-                    { q: "14. For ichidagi o'zgaruvchi tashqarida ishlaydimi?", opts: ["Yo'q", "Ha", "Faqat main da", "Farqsiz"], ans: 0 },
-                    { q: "15. i-- nima?", opts: ["1 ga kamaytirish", "1 ga oshirish", "2 ga bo'lish", "Nol qilish"], ans: 0 },
-                    { q: "16. for(int i=0; i<=10; i+=2) nimani chiqaradi?", opts: ["Juft sonlarni", "Toq sonlarni", "Barchasini", "Hech narsani"], ans: 0 },
-                    { q: "17. Loop Optimization nima?", opts: ["Sikl tezligini oshirish", "O'chirish", "Xato izlash", "Ko'paytirish"], ans: 0 },
-                    { q: "18. Break ichki siklda chaqirilsa qaysi to'xtaydi?", opts: ["Faqat ichki sikl", "Tashqi ham", "Butun dastur", "Hech qaysisi"], ans: 0 },
-                    { q: "19. Continue ichida chaqirilsa nima bo'ladi?", opts: ["Ichkining keyingisiga o'tadi", "Tashqiga", "To'xtaydi", "Nol"], ans: 0 },
-                    { q: "20. Barcha for ni while ga o'tkazsa bo'ladimi?", opts: ["Ha", "Yo'q", "Faqat oddiyini", "Faqat floatni"], ans: 0 }
-                ],
-                tasks: [
-                    { t: "1-Masala: 1 dan 100 gacha juft sonlarni chiqaring.", hint: "for(int i=2; i<=100; i+=2)" },
-                    { t: "2-Masala: Karra jadvalini chop eting.", hint: "for bilan i*j" },
-                    { t: "3-Masala: 5x5 yulduzcha kvadratini chizing.", hint: "Nested for loops" },
-                    { t: "4-Masala: Yulduzli uchburchak chizing.", hint: "j <= i sharti" },
-                    { t: "5-Masala: Fibonachchi ketma-ketligini chiqaring.", hint: "a=0, b=1, c=a+b" }
-                ]
-            },
-            {
-                id: "functions",
-                title: "5. Funksiyalar (Functions)",
-                analogy: "Funksiya — Mikser! Unga meva berasiz (argument), u aralashtirib sharbat qaytaradi (return).",
-                text: "Kodni qayta yozmaslik va tartiblash uchun funksiyalardan foydalanamiz.",
-                code: `#include <stdio.h>\n\nint kvadrat(int n) {\n    return n * n;\n}\n\nint main() {\n    printf("7 ning kvadrati: %d\\n", kvadrat(7));\n    return 0;\n}`,
-                questions: [
-                    { q: "1. Funksiya nega kerak?", opts: ["Kodni qayta ishlatish uchun", "Sekinlashtirish uchun", "Faqat matn uchun", "Kerakmas"], ans: 0 },
-                    { q: "2. Qiymat qaytarmaydigan funksiya?", opts: ["void", "int", "float", "char"], ans: 0 },
-                    { q: "3. Qiymat qaytaruvchi so'z?", opts: ["return", "get", "send", "back"], ans: 0 },
-                    { q: "4. Uzatiladigan o'zgaruvchilar nima deyiladi?", opts: ["Argumentlar", "Natija", "Sikl", "Klass"], ans: 0 },
-                    { q: "5. Main() funksiyami?", opts: ["Ha", "Yo'q", "Sikl", "Kutubxona"], ans: 0 },
-                    { q: "6. Funksiya prototipi nima?", opts: ["Main dan tepada e'lon qilish", "O'chirish", "Xato kodi", "Kutubxona"], ans: 0 },
-                    { q: "7. Rekursiya nima?", opts: ["O'zini o'zi chaqirish", "Xatolik", "Sikl", "O'zgaruvchi"], ans: 0 },
-                    { q: "8. Local o'zgaruvchi qayerda ishlaydi?", opts: ["Faqat o'z funksiyasida", "Hamma joyda", "Faqat main da", "Linuxda"], ans: 0 },
-                    { q: "9. Global o'zgaruvchi qayerda bo'ladi?", opts: ["Tashqarida", "Main ichida", "For ichida", "Void ichida"], ans: 0 },
-                    { q: "10. Return nechtagacha qiymat qaytaradi?", opts: ["1 ta", "Ko'p", "10 ta", "Xohlagancha"], ans: 0 },
-                    { q: "11. Void funksiyada return nima qiladi?", opts: ["To'xtatadi", "Xato beradi", "Son qaytaradi", "Hech narsa"], ans: 0 },
-                    { q: "12. Pass by Value nima?", opts: ["Nusxasini uzatish", "Aslini uzatish", "Manzil berish", "O'chirish"], ans: 0 },
-                    { q: "13. Pass by Reference uchun nima kerak?", opts: ["Pointer", "Float", "If-Else", "For"], ans: 0 },
-                    { q: "14. Kalit so'zni funksiya nomi qilsa bo'ladimi?", opts: ["Yo'q", "Ha", "Faqat void", "Farqsiz"], ans: 0 },
-                    { q: "15. Math.h kutubxonasida nimalar bor?", opts: ["pow(), sqrt()", "printf(), scanf()", "main()", "gets()"], ans: 0 },
-                    { q: "16. sqrt(16) nimani beradi?", opts: ["4.0", "256", "16", "0"], ans: 0 },
-                    { q: "17. pow(2, 3) nimani hisoblaydi?", opts: ["2 ning 3-darajasini (8)", "5", "6", "9"], ans: 0 },
-                    { q: "18. Rekursiyada to'xtash sharti bo'lmasa nima bo'ladi?", opts: ["Stack Overflow", "Cheksiz", "0 beradi", "Hech narsa"], ans: 0 },
-                    { q: "19. Funksiya parametrsiz bo'ladimi?", opts: ["Ha", "Yo'q", "Faqat void bo'lsa", "Faqat main bo'lsa"], ans: 0 },
-                    { q: "20. Funksiya ichida boshqa funksiya ta'riflanadimi?", opts: ["Yo'q (C tilida taqiqlangan)", "Ha", "Faqat GCC da", "Farqsiz"], ans: 0 }
-                ],
-                tasks: [
-                    { t: "1-Masala: yigindi(a,b) funksiyasini yozing.", hint: "int yigindi(int a, int b) { return a+b; }" },
-                    { t: "2-Masala: isJuft() funksiyasini tuzing.", hint: "1 yoki 0 qaytarsin." },
-                    { t: "3-Masala: Sonning kubini hisoblang.", hint: "return n*n*n;" },
-                    { t: "4-Masala: 3 ta sonning eng kattasini topuvchi funksiya yozing.", hint: "If mantiqi" },
-                    { t: "5-Masala: Rekursiv faktorial funksiyasini tuzing.", hint: "if(n<=1) return 1; return n*fact(n-1);" }
-                ]
-            }
-        ];
+function appendMessage(text, sender) {
+    const chatBox = document.getElementById('chatBox');
+    const div = document.createElement('div');
+    div.className = `msg ${sender}`;
+    div.innerText = text;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    return div;
+}
 
-        let activeModIdx = 0;
-        let currQuizIdx = 0;
-        let score = 0;
+// 1. Google Gemini API
+async function fetchGemini(prompt) {
+    if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY") {
+        return "⚠️ Gemini API kaliti kiritilmagan.";
+    }
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+    });
+    const data = await res.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || "Javob olib bo'lmadi.";
+}
 
-        function initApp() {
-            renderMenu();
-            loadModule(0);
-        }
+// 2. Groq (Meta Llama 3) API
+async function fetchGroq(prompt) {
+    if (!GROQ_API_KEY || GROQ_API_KEY === "YOUR_GROQ_API_KEY") {
+        return "⚠️ Groq API kaliti kiritilmagan.";
+    }
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${GROQ_API_KEY}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            messages: [{ role: "user", content: prompt }],
+            model: "llama3-8b-8192"
+        })
+    });
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content || "Javob olib bo'lmadi.";
+}
 
-        function renderMenu() {
-            const menu = document.getElementById('topicMenu');
-            menu.innerHTML = '';
-            modules.forEach((mod, idx) => {
-                const btn = document.createElement('div');
-                btn.className = `topic-btn ${idx === 0 ? 'active' : ''}`;
-                btn.innerHTML = `<i class="fa-solid fa-code"></i> ${mod.title}`;
-                btn.onclick = () => loadModule(idx);
-                menu.appendChild(btn);
-            });
-        }
+// 3. Pollinations AI API (API Key talab qilmaydi)
+async function fetchPollinations(prompt) {
+    const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
+    return await res.text();
+}
+</script>
 
-        function loadModule(idx) {
-            activeModIdx = idx;
-            currQuizIdx = 0;
-            score = 0;
-            const mod = modules[idx];
-
-            document.querySelectorAll('.topic-btn').forEach((b, i) => {
-                b.classList.toggle('active', i === idx);
-            });
-
-            document.getElementById('currentCategoryTitle').innerText = `Darslik: ${mod.title}`;
-            document.getElementById('topicTitle').innerHTML = `<i class="fa-solid fa-book-open"></i> ${mod.title} — Nazariya`;
-            document.getElementById('topicAnalogy').innerHTML = `💡 <b>Hayotiy O'xshatish:</b> ${mod.analogy}`;
-            document.getElementById('topicText').innerHTML = mod.text;
-            document.getElementById('codeEditor').value = mod.code;
-
-            document.getElementById('terminalOutput').innerText = "💻 Terminal (Natija): Kodni ishga tushirish tugmasini bosing...";
-
-            renderQuiz();
-            renderTasks();
-        }
-
-        function runCode() {
-            const code = document.getElementById('codeEditor').value;
-            const term = document.getElementById('terminalOutput');
-            term.innerText = "⚡ Kod bajarilmoqda...\n";
-
-            setTimeout(() => {
-                let output = ">>> Dastur muvaffaqiyatli bajarildi:\n";
-                if(code.includes('printf')) {
-                    const matches = code.match(/printf\s*\(\s*"([^"]+)"/g);
-                    if(matches) {
-                        matches.forEach(m => {
-                            let text = m.replace(/printf\s*\(\s*"/, '').replace(/"$/, '').replace(/\\n/g, '\n');
-                            output += text + "\n";
-                        });
-                    } else {
-                        output += "Salom! Kod muvaffaqiyatli runs bo'ldi.";
-                    }
-                } else {
-                    output += "Kodda printf topilmadi, lekin xatosiz bajarildi.";
-                }
-                term.innerText = output;
-            }, 400);
-        }
-
-        function renderQuiz() {
-            const mod = modules[activeModIdx];
-            const qData = mod.questions[currQuizIdx];
-
-            document.getElementById('quizProgress').innerText = `Savol: ${currQuizIdx + 1} / 20`;
-            document.getElementById('quizScore').innerText = `To'g'ri: ${score}`;
-            document.getElementById('quizQuestionText').innerText = qData.q;
-
-            const optsBox = document.getElementById('quizOptionsBox');
-            optsBox.innerHTML = '';
-            qData.opts.forEach((opt, oIdx) => {
-                const b = document.createElement('button');
-                b.className = 'option-btn';
-                b.innerText = opt;
-                b.onclick = () => checkAnswer(oIdx);
-                optsBox.appendChild(b);
-            });
-        }
-
-        function checkAnswer(chosen) {
-            const mod = modules[activeModIdx];
-            const qData = mod.questions[currQuizIdx];
-            if(chosen === qData.ans) {
-                alert("🎯 Barakalla! To'g'ri javob.");
-                score++;
-            } else {
-                alert("❌ Noto'g'ri javob. Qayta o'ylang!");
-            }
-            nextQuestion();
-        }
-
-        function nextQuestion() {
-            const mod = modules[activeModIdx];
-            if(currQuizIdx < mod.questions.length - 1) {
-                currQuizIdx++;
-                renderQuiz();
-            } else {
-                alert(`🏁 Test tugadi! Natijangiz: ${score} / 20`);
-            }
-        }
-
-        function prevQuestion() {
-            if(currQuizIdx > 0) {
-                currQuizIdx--;
-                renderQuiz();
-            }
-        }
-
-        function renderTasks() {
-            const mod = modules[activeModIdx];
-            const container = document.getElementById('tasksContainer');
-            container.innerHTML = '';
-
-            mod.tasks.forEach((task) => {
-                const card = document.createElement('div');
-                card.className = 'task-card';
-                card.innerHTML = `
-                    <div class="task-title">${task.t}</div>
-                    <div style="font-size: 12px; color: var(--text-gray);">💡 Yo'llanma: ${task.hint}</div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        initApp();
-    </script>
 </body>
 </html>
