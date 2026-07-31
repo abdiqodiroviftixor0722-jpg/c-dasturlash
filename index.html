@@ -3,218 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muhabbat Tenglamasi</title>
+    <title>C Dasturlash Tili - Interaktiv Kurs</title>
     <style>
-        body {
-            background: linear-gradient(135deg, #ffe6f0 0%, #fff0f5 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 16px;
-            font-family: 'Arial', sans-serif;
-            overflow: hidden;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .card {
-            background: white;
-            padding: 24px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4);
-            text-align: center;
-            max-width: 380px;
-            width: 100%;
-            position: relative;
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
         }
-        h1 {
-            color: #ff4d94;
-            font-size: 22px;
-            margin-bottom: 12px;
-        }
-        .sub-text {
-            color: #555;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-        .formula {
-            background: #fff0f6;
-            border: 2px dashed #ff85c0;
-            border-radius: 16px;
-            padding: 12px;
-            color: #c41d7f;
-            font-weight: bold;
-            font-size: 15px;
-            margin-bottom: 20px;
-        }
-        .question-box {
-            margin-top: 15px;
-            min-height: 220px;
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background-color: #0b0f19;
+            padding: 20px;
+            border-right: 1px solid #334155;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            gap: 10px;
         }
-        .question-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
+
+        .sidebar h2 {
+            color: var(--accent);
+            font-size: 20px;
             margin-bottom: 15px;
-        }
-        .meme-box {
-            height: 110px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 10px;
+        }
+
+        .module-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid #334155;
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .module-btn:hover, .module-btn.active {
+            background-color: var(--accent);
+            color: #000;
+            font-weight: bold;
+            border-color: var(--accent);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            max-width: 900px;
+        }
+
+        .lesson-card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
+        }
+
+        h1 {
+            color: var(--accent);
             margin-bottom: 15px;
         }
-        .meme-img {
-            max-height: 100px;
-            max-width: 150px;
+
+        p {
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            background-color: #090d16;
+            padding: 18px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            color: #38bdf8;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        /* Quiz Box */
+        .quiz-container {
+            background-color: #0f172a;
+            padding: 20px;
             border-radius: 12px;
+            border: 1px dashed #475569;
+            margin-top: 25px;
         }
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
+
+        .quiz-title {
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #f1f5f9;
+        }
+
+        .option-btn {
+            display: block;
             width: 100%;
-            position: relative;
-            min-height: 50px;
-        }
-        .btn-yes {
-            background: #ff4d94;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 50px;
+            background: #1e293b;
+            color: #f8fafc;
+            border: 1px solid #334155;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: left;
+            margin-bottom: 8px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 77, 148, 0.4);
             transition: 0.2s;
-            z-index: 5;
         }
-        .btn-yes:active {
-            transform: scale(0.95);
+
+        .option-btn:hover {
+            background-color: #334155;
         }
-        .btn-no {
-            background: #ff7875;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            font-size: 16px;
+
+        .result-msg {
+            margin-top: 12px;
             font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 120, 117, 0.4);
-            transition: transform 0.2s ease;
-            z-index: 10;
-            white-space: nowrap;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; }
+            .main-content { padding: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>Sen bilan hayotimning eng chiroyli formulasi topildi 💕</h1>
-        <p class="sub-text">
-            Azizim, sen matematika o'qituvchisi bo'lsang ham, yuragimdagi hislarni hech qanday formula to'liq ifodalay olmaydi. Lekin bitta narsa aniq: <b>menga eng to'g'ri yechim — bu sensan.</b>
-        </p>
+    <div class="sidebar">
+        <h2>⚡ C Trainer</h2>
+        <button class="module-btn active" onclick="loadLesson(0)">1. Kirish & Birinchi Kod</button>
+        <button class="module-btn" onclick="loadLesson(1)">2. O'zgaruvchilar (Variables)</button>
+        <button class="module-btn" onclick="loadLesson(2)">3. Shartlar (If / Else)</button>
+        <button class="module-btn" onclick="loadLesson(3)">4. Tsikllar (For / While)</button>
+        <button class="module-btn" onclick="loadLesson(4)">5. Massivlar (Arrays)</button>
+        <button class="module-btn" onclick="loadLesson(5)">6. Ko'rsatkichlar (Pointers)</button>
+    </div>
 
-        <div class="formula">
-            (Men + Sen) = Muhabbatning eng chiroyli natijasi 💕
-        </div>
-
-        <div class="question-box" id="questionBox">
-            <div class="question-title" id="qTitle">Meni ham sevasanmi? 🥰</div>
+    <div class="main-content">
+        <div class="lesson-card">
+            <h1 id="lessonTitle">Yuklanmoqda...</h1>
+            <p id="lessonText"></p>
             
-            <div class="meme-box" id="memeContainer">
-                <!-- Dastlabki yoqimli GIF -->
-                <img class="meme-img" id="currentMeme" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3d6bWZyMzZndWxsNWhwb2pzeHFjcXMxeXN6M3BxeXRiMmx0Ymw0MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/c6wvfeV2nHiDTJ9Yth/giphy.gif" alt="Cute cat">
-            </div>
+            <h3>📋 Kod Namunasi:</h3>
+            <pre><code id="codeExample"></code></pre>
 
-            <div class="btn-container" id="btnContainer">
-                <button class="btn-yes" onclick="nextQuestion()">Ha 💕</button>
-                <button class="btn-no" id="runawayBtn" onmouseover="escapeBtn()" ontouchstart="escapeBtn()" onclick="escapeBtn()">Eee yo'q-da 😜</button>
+            <div class="quiz-container">
+                <div class="quiz-title" id="quizQuestion">Topshiriq yuklanmoqda...</div>
+                <div id="quizOptions"></div>
+                <div id="resultMsg" class="result-msg"></div>
             </div>
         </div>
     </div>
 
     <script>
-        const questions = [
-            "Rostdanmi? 🥹",
-            "Aniqmi? Yana bir bor o'ylab ko'r-a! 🤔",
-            "Hazillashmayapsanmi? 🧐",
-            "Bo'ldi, endi orqaga yo'l yo'q! ❤️"
+        const lessons = [
+            {
+                title: "1. Kirish & Birinchi Kod",
+                text: "C dasturlash tili barcha zamonaviy tillarning otasi hisoblanadi. Dastur doimo 'main()' funksiyasidan boshlanadi. Ekranga matn chiqarish uchun 'printf()' buyrug'i ishlatiladi.",
+                code: `#include <stdio.h>\n\nint main() {\n    printf("Salom, Dunyo!\\n");\n    return 0;\n}`,
+                question: "Ekranga matn chiqarish uchun qaysi funksiya ishlatiladi?",
+                options: ["cin >>", "printf()", "Console.WriteLine()", "print()"],
+                correct: 1
+            },
+            {
+                title: "2. O'zgaruvchilar (Variables)",
+                text: "C tilida har bir o'zgaruvchining turi aniq ko'rsatilishi kerak: 'int' (butun son), 'float' (o'nlik son), 'char' (belgi).",
+                code: `#include <stdio.h>\n\nint main() {\n    int yosh = 20;\n    float narx = 15.5;\n    char daraja = 'A';\n    printf("Yosh: %d", yosh);\n    return 0;\n}`,
+                question: "C tilida 'int' qanday turdagi ma'lumotni saqlaydi?",
+                options: ["Matnlar", "O'nlik kasr sonlar", "Butun sonlar", "Mantiqiy qiymat"],
+                correct: 2
+            },
+            {
+                title: "3. Shart Operatorlari (If / Else)",
+                text: "Kodingiz ma'lum bir shartga qarab har xil yo'ldan ketishini ta'minlaydi.",
+                code: `#include <stdio.h>\n\nint main() {\n    int ball = 85;\n    if (ball >= 60) {\n        printf("O'tdingiz!\\n");\n    } else {\n        printf("Yiqildingiz!\\n");\n    }\n    return 0;\n}`,
+                question: "Agar 'ball = 50' bo'lsa, yuqoridagi kod nima chiqaradi?",
+                options: ["O'tdingiz!", "Yiqildingiz!", "Hech narsa", "Xatolik beradi"],
+                correct: 1
+            },
+            {
+                title: "4. Tsikllar (For / While)",
+                text: "Bir xil kodni bir necha marta takrorlash uchun ishlatiladi.",
+                code: `#include <stdio.h>\n\nint main() {\n    for(int i = 1; i <= 5; i++) {\n        printf("Sanoq: %d\\n", i);\n    }\n    return 0;\n}`,
+                question: "Yuqoridagi 'for' tsikli necha marta takrorlanadi?",
+                options: ["4 marta", "5 marta", "6 marta", "Cheksiz"],
+                correct: 1
+            },
+            {
+                title: "5. Massivlar (Arrays)",
+                text: "Bir nechta bir xil turdagi qiymatlarni bitta o'zgaruvchida ketma-ket saqlash imkonini beradi.",
+                code: `#include <stdio.h>\n\nint main() {\n    int sonlar[3] = {10, 20, 30};\n    printf("Birinchi element: %d", sonlar[0]);\n    return 0;\n}`,
+                question: "Massivning birinchi elementi indeksi nechidan boshlanadi?",
+                options: ["1", "0", "-1", "i"],
+                correct: 1
+            },
+            {
+                title: "6. Ko'rsatkichlar (Pointers)",
+                text: "Pointer — kompyuter xotirasidagi o'zgaruvchining aniq manzilini (address) saqlaydigan maxsus o'zgaruvchidir.",
+                code: `#include <stdio.h>\n\nint main() {\n    int x = 10;\n    int *ptr = &x;\n    printf("Xotira manzili: %p", ptr);\n    return 0;\n}`,
+                question: "O'zgaruvchining xotiradagi manzilini olish uchun qaysi belgi ishlatiladi?",
+                options: ["*", "&", "%", "#"],
+                correct: 1
+            }
         ];
-        let step = 0;
 
-        const runawayTexts = [
-            "Eee yo'q-da 😜",
-            "Boshqa o'ylab ko'r! 🤔",
-            "Aldamagin eeee! 🥺",
-            "Baribir 'Ha' deysan! 😂",
-            "Qochib qutulamaysan! 🏃‍♂️"
-        ];
-        let textIndex = 0;
+        let currentIdx = 0;
 
-        // Yig'layotgan memlar to'plami
-        const sadMemes = [
-            "https://media.giphy.com/media/d2lhZ5WA6a06s/giphy.gif",
-            "https://media.giphy.com/media/2wx3MigL1306nLTViH/giphy.gif",
-            "https://media.giphy.com/media/ISOckXU1vnEG4/giphy.gif"
-        ];
-
-        function escapeBtn() {
-            const btn = document.getElementById('runawayBtn');
-            const memeImg = document.getElementById('currentMeme');
+        function loadLesson(index) {
+            currentIdx = index;
+            const lesson = lessons[index];
             
-            // Yig'layotgan memni ko'rsatamiz
-            const randomSadMeme = sadMemes[Math.floor(Math.random() * sadMemes.length)];
-            memeImg.src = randomSadMeme;
+            // Sidebar buttons update
+            const btns = document.querySelectorAll('.module-btn');
+            btns.forEach((btn, i) => {
+                if(i === index) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
 
-            // "Ha" tugmasiga xaqiqatan tegmasligi uchun faqat atrofga suramiz
-            // Masalan, -120px dan -50px gacha (chap/o'ng chetlar) va past/buloqlarga
-            const randomX = (Math.random() > 0.5 ? 1 : -1) * (60 + Math.random() * 80);
-            const randomY = (Math.random() - 0.5) * 100;
+            // Content update
+            document.getElementById('lessonTitle').innerText = lesson.title;
+            document.getElementById('lessonText').innerText = lesson.text;
+            document.getElementById('codeExample').innerText = lesson.code;
+            document.getElementById('quizQuestion').innerText = "❓ Test: " + lesson.question;
 
-            btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            // Quiz options
+            const optionsBox = document.getElementById('quizOptions');
+            optionsBox.innerHTML = '';
+            
+            lesson.options.forEach((opt, i) => {
+                const b = document.createElement('button');
+                b.className = 'option-btn';
+                b.innerText = opt;
+                b.onclick = () => checkAnswer(i);
+                optionsBox.appendChild(b);
+            });
 
-            textIndex = (textIndex + 1) % runawayTexts.length;
-            btn.innerText = runawayTexts[textIndex];
+            const res = document.getElementById('resultMsg');
+            res.style.display = 'none';
         }
 
-        function nextQuestion() {
-            const memeImg = document.getElementById('currentMeme');
-            // Quvnoq memga qaytaramiz
-            memeImg.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3d6bWZyMzZndWxsNWhwb2pzeHFjcXMxeXN6M3BxeXRiMmx0Ymw0MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/c6wvfeV2nHiDTJ9Yth/giphy.gif";
+        function checkAnswer(chosen) {
+            const lesson = lessons[currentIdx];
+            const res = document.getElementById('resultMsg');
+            res.style.display = 'block';
 
-            if (step < questions.length) {
-                document.getElementById('qTitle').innerText = questions[step];
-                step++;
-                
-                // "Yo'q" tugmasini o'z o'rniga qaytaramiz (lekin baribir Ha'ning yonida)
-                const btn = document.getElementById('runawayBtn');
-                btn.style.transform = `translate(0px, 0px)`;
+            if(chosen === lesson.correct) {
+                res.style.backgroundColor = 'rgba(34, 197, 94, 0.2)';
+                res.style.color = '#22c55e';
+                res.innerText = "✅ Barakalla! To'g'ri javob.";
             } else {
-                showSuccess();
+                res.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+                res.style.color = '#ef4444';
+                res.innerText = "❌ Noto'g'ri, qaytadan urinib ko'ring!";
             }
         }
 
-        function showSuccess() {
-            const qBox = document.getElementById('questionBox');
-            qBox.innerHTML = `
-                <img class="meme-img" style="max-height: 140px;" src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqNXhkaXRrNjFrOW5sajJ0bHZsd3Bsa3p5ODR5OHdndWJvOWQzciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/TdfyKrN7HGTIY/giphy.gif" alt="Happy meme">
-                <div style="font-size: 24px; margin-top: 10px; margin-bottom: 5px;">🎉</div>
-                <h2 style="color: #ff4d94; margin-bottom: 8px;">MALADES!</h2>
-                <p style="color: #555; font-size: 14.5px;">
-                    Demak, muhabbat tenglamasi muvaffaqiyatli yechildi! ❤️ ✨
-                </p>
-                <button class="btn-yes" onclick="location.reload()" style="margin-top: 10px; font-size: 14px; padding: 6px 16px;">Boshidan boshlash 🔄</button>
-            `;
-        }
+        // Birinchi darsni yuklash
+        loadLesson(0);
     </script>
 </body>
 </html>
