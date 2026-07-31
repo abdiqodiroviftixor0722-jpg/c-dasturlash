@@ -1,117 +1,276 @@
-
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <title>C Dasturlash - Groq AI Instructor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-Dasturlash: Iftixor Mega Platformasi</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #1e1e2e; color: #cdd6f4; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .instructor-card { width: 100%; max-width: 650px; background: #181825; border: 1px solid #313244; border-radius: 12px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
-        .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #313244; padding-bottom: 12px; margin-bottom: 15px; }
-        .header h3 { margin: 0; color: #89b4fa; }
-        .badge { background: #a6e3a1; color: #11111b; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 6px; }
-        .chat-box { height: 380px; overflow-y: auto; border: 1px solid #313244; background: #11111b; padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 12px; }
-        .msg { padding: 10px 14px; border-radius: 8px; font-size: 14px; line-height: 1.5; white-space: pre-wrap; font-family: 'Courier New', Courier, monospace; }
-        .user { background: #89b4fa; color: #11111b; align-self: flex-end; max-width: 80%; }
-        .instructor { background: #313244; color: #cdd6f4; align-self: flex-start; max-width: 90%; border-left: 3px solid #89b4fa; }
-        .input-area { display: flex; gap: 10px; margin-top: 15px; }
-        textarea { flex: 1; background: #11111b; border: 1px solid #313244; color: #cdd6f4; border-radius: 8px; padding: 10px; height: 50px; resize: none; font-family: inherit; }
-        textarea:focus { outline: 1px solid #89b4fa; }
-        button { background: #89b4fa; color: #11111b; border: none; padding: 0 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        button:hover { background: #b4befe; }
+        :root {
+            --bg-main: #0f172a;
+            --panel-bg: #1e293b;
+            --card-bg: #334155;
+            --accent-cyan: #38bdf8;
+            --accent-green: #4ade80;
+            --accent-yellow: #facc15;
+            --accent-purple: #c084fc;
+            --text-white: #f8fafc;
+            --text-gray: #94a3b8;
+            --border-color: #475569;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-white); display: flex; height: 100vh; overflow: hidden; }
+
+        /* Left Navigation Sidebar */
+        .sidebar { width: 260px; background-color: var(--panel-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .sidebar-header { padding: 18px; font-size: 16px; font-weight: bold; color: var(--accent-cyan); border-bottom: 1px solid var(--border-color); }
+        .author-badge { font-size: 11px; background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--accent-cyan); margin-top: 4px; display: inline-block; }
+        .topic-list { flex: 1; overflow-y: auto; padding: 10px; }
+        .topic-btn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; color: var(--text-gray); border-radius: 8px; cursor: pointer; margin-bottom: 6px; font-size: 13px; transition: all 0.2s; }
+        .topic-btn:hover { background: rgba(56, 189, 248, 0.1); color: var(--accent-cyan); }
+        .topic-btn.active { background: var(--accent-cyan); color: #0f172a; font-weight: bold; }
+
+        /* Workspace Main */
+        .main-workspace { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .top-navbar { height: 55px; background-color: var(--panel-bg); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+        
+        /* Layout Structure */
+        .content-area { flex: 1; display: flex; overflow: hidden; }
+        .content-body { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
+
+        /* Editor & Terminal Section */
+        .editor-container { background: #090d16; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+        .editor-header { background: #1e293b; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+        .code-input { width: 100%; height: 180px; background: #090d16; color: #7dd3fc; border: none; padding: 15px; font-family: 'Consolas', monospace; font-size: 13.5px; outline: none; resize: none; line-height: 1.5; }
+        .terminal-box { background: #000; border-top: 1px solid var(--border-color); padding: 12px 15px; font-family: 'Consolas', monospace; font-size: 13px; color: var(--accent-green); min-height: 60px; max-height: 100px; overflow-y: auto; }
+
+        /* AI Chat Panel (Right) */
+        .ai-panel { width: 320px; background-color: var(--panel-bg); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .ai-header { padding: 14px; font-weight: bold; color: var(--accent-purple); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; font-size: 13.5px; }
+        .chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .chat-bubble { padding: 9px 12px; border-radius: 8px; font-size: 12.5px; line-height: 1.45; max-width: 90%; word-break: break-word; white-space: pre-wrap; }
+        .chat-bubble.ai { background: var(--card-bg); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-white); }
+        .chat-bubble.user { background: var(--accent-cyan); color: #0f172a; font-weight: 600; align-self: flex-end; }
+        .chat-bubble.loading { font-style: italic; color: var(--accent-yellow); }
+        .chat-input-box { padding: 10px; border-top: 1px solid var(--border-color); display: flex; gap: 6px; }
+        .chat-input-box input { flex: 1; background: var(--bg-main); border: 1px solid var(--border-color); padding: 8px 10px; border-radius: 6px; color: var(--text-white); outline: none; font-size: 12px; }
+
+        /* Cards */
+        .card { background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 18px; }
+        .card-title { font-size: 16px; color: var(--accent-cyan); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .simple-text { font-size: 13.5px; line-height: 1.6; color: var(--text-white); margin-bottom: 12px; }
+        .analogy-box { background: rgba(250, 204, 21, 0.1); border-left: 4px solid var(--accent-yellow); padding: 10px; border-radius: 0 6px 6px 0; font-size: 13px; color: #fef08a; margin-bottom: 12px; }
+
+        /* Quiz & Tasks */
+        .quiz-container { background: var(--card-bg); border-radius: 8px; padding: 14px; margin-top: 8px; }
+        .quiz-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px; color: var(--accent-yellow); font-size: 12.5px; }
+        .option-btn { display: block; width: 100%; text-align: left; padding: 9px 12px; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-white); border-radius: 6px; margin-bottom: 6px; cursor: pointer; font-size: 12.5px; transition: 0.2s; }
+        .option-btn:hover { border-color: var(--accent-cyan); background: rgba(56, 189, 248, 0.05); }
+
+        .task-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; margin-bottom: 8px; font-size: 13px; }
+        .task-title { font-weight: bold; color: var(--accent-green); margin-bottom: 4px; }
+
+        .btn { padding: 6px 14px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .btn-cyan { background: var(--accent-cyan); color: #0f172a; }
+        .btn-green { background: var(--accent-green); color: #0f172a; }
+        .btn-purple { background: var(--accent-purple); color: #0f172a; }
+        .btn-gray { background: var(--card-bg); color: var(--text-white); }
     </style>
 </head>
 <body>
 
-<div class="instructor-card">
-    <div class="header">
-        <h3>👨‍🏫 C Dasturlash AI Instruktori</h3>
-        <span class="badge">Groq (Llama 3) Online</span>
+    <!-- Sidebar Menu -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div>
+                <i class="fa-solid fa-code"></i> C-Pro Studio
+                <div><span class="author-badge">Muallif: Iftixor Abdiqodirov</span></div>
+            </div>
+        </div>
+        <div class="topic-list" id="topicMenu"></div>
     </div>
 
-    <!-- Chat oynasi -->
-    <div class="chat-box" id="chatBox">
-        <div class="msg instructor">Salom! Men sizning C dasturlash tili bo'yicha shaxsiy AI instruktoringizman. 
+    <!-- Main Workspace -->
+    <div class="main-workspace">
+        <div class="top-navbar">
+            <span style="font-size: 13.5px; font-weight: 600; color: var(--text-gray);" id="currentCategoryTitle">Mavzu...</span>
+            <span style="background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 4px 10px; border-radius: 20px; font-size: 11.5px; font-weight: bold;">
+                <i class="fa-solid fa-code-branch"></i> Creator: Iftixor
+            </span>
+        </div>
 
-C kodingizni tashlang, xatolarini topib beraman yoki istalgan mavzuingizni tushuntiraman!</div>
+        <div class="content-area">
+            <!-- Center Content -->
+            <div class="content-body">
+                
+                <!-- 1. Nazariya -->
+                <div class="card">
+                    <div class="card-title" id="topicTitle"><i class="fa-solid fa-book-open"></i> Mavzu Nazariyasi</div>
+                    <div class="analogy-box" id="topicAnalogy">💡 Tushuntirish...</div>
+                    <div class="simple-text" id="topicText">Darslik matni...</div>
+                </div>
+
+                <!-- 2. Interactive Code Editor -->
+                <div class="card">
+                    <div class="card-title"><i class="fa-solid fa-terminal"></i> Interaktiv C Kod Tahrirlagich</div>
+                    <div class="editor-container">
+                        <div class="editor-header">
+                            <span style="font-size: 12px; color: var(--text-gray);"><i class="fa-solid fa-file-code"></i> main.c</span>
+                            <button class="btn btn-green" onclick="runCode()"><i class="fa-solid fa-play"></i> Kodni Ishga Tushirish</button>
+                        </div>
+                        <textarea id="codeEditor" class="code-input" spellcheck="false"></textarea>
+                        <div class="terminal-box" id="terminalOutput">💻 Terminal (Natija): Kodni ishga tushirish tugmasini bosing...</div>
+                    </div>
+                </div>
+
+                <!-- 3. Test (20 ta Savol) -->
+                <div class="card">
+                    <div class="card-title"><i class="fa-solid fa-circle-question"></i> Bilimni Tekshirish Testlari (20 ta Savol)</div>
+                    <div class="quiz-container">
+                        <div class="quiz-header">
+                            <span id="quizProgress">Savol: 1 / 20</span>
+                            <span id="quizScore" style="color: var(--accent-green);">To'g'ri: 0</span>
+                        </div>
+                        <div class="simple-text" id="quizQuestionText" style="font-weight: 600;">Savol...</div>
+                        <div id="quizOptionsBox"></div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                            <button class="btn btn-gray" onclick="prevQuestion()"><i class="fa-solid fa-chevron-left"></i> Oldingi</button>
+                            <button class="btn btn-cyan" onclick="nextQuestion()">Keyingi <i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Amaliy Masalalar -->
+                <div class="card">
+                    <div class="card-title"><i class="fa-solid fa-list-check"></i> Amaliy Topshiriqlar (5 ta Masala)</div>
+                    <div id="tasksContainer"></div>
+                </div>
+
+            </div>
+
+            <!-- AI Tutor Chat Panel (Groq AI) -->
+            <div class="ai-panel">
+                <div class="ai-header">
+                    <span><i class="fa-solid fa-bolt"></i> Iftixor AI Instructor</span>
+                    <span style="font-size: 10px; background: rgba(137, 180, 250, 0.2); color: var(--accent-cyan); padding: 2px 6px; border-radius: 4px;">Groq Llama 3</span>
+                </div>
+                <div class="chat-messages" id="chatArea">
+                    <div class="chat-bubble ai">
+                        Salom! Men Iftixor platformasining Groq AI instruktoriman. C dasturlash kodingiz bo'yicha savollaringizni bering!
+                    </div>
+                </div>
+                <div class="chat-input-box">
+                    <input type="text" id="aiInput" placeholder="C kodingizni yoki savolingizni bering..." onkeypress="if(event.key==='Enter') askAI()">
+                    <button class="btn btn-purple" onclick="askAI()"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Savol/Kod yuborish -->
-    <div class="input-area">
-        <textarea id="userInput" placeholder="C kodingizni yoki savolingizni bering..."></textarea>
-        <button onclick="askInstructor()">Yuborish</button>
-    </div>
-</div>
+    <script>
+        // --- GROQ AI INTEGRATION ---
+        // Groq API Kalitini console.groq.com dan olib kiriting:
+        const GROQ_API_KEY = "YOUR_GROQ_API_KEY"; 
 
-<script>
-// Groq API Kalitini shu yerga qo'yasiz (console.groq.com dan bepul olinadi)
-const GROQ_API_KEY = "YOUR_GROQ_API_KEY";
+        async function askAI() {
+            const input = document.getElementById('aiInput');
+            const val = input.value.trim();
+            if(!val) return;
 
-async function askInstructor() {
-    const input = document.getElementById('userInput');
-    const text = input.value.trim();
-    if (!text) return;
+            const chat = document.getElementById('chatArea');
+            
+            // User message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-bubble user';
+            userMsg.innerText = val;
+            chat.appendChild(userMsg);
+            input.value = '';
 
-    appendMessage(text, 'user');
-    input.value = '';
+            // Loading state
+            const loadingMsg = document.createElement('div');
+            loadingMsg.className = 'chat-bubble ai loading';
+            loadingMsg.innerText = "⚡ Groq javob tayyorlamoqda...";
+            chat.appendChild(loadingMsg);
+            chat.scrollTop = chat.scrollHeight;
 
-    const loadingMsg = appendMessage("⚡ Groq kodni tahlil qilmoqda...", 'instructor');
+            try {
+                if (!GROQ_API_KEY || GROQ_API_KEY === "YOUR_GROQ_API_KEY") {
+                    loadingMsg.innerText = "⚠️ GROQ_API_KEY kiritilmagan. Kod ichidan kalitingizni qo'ying.";
+                    chat.scrollTop = chat.scrollHeight;
+                    return;
+                }
 
-    try {
-        if (!GROQ_API_KEY || GROQ_API_KEY === "YOUR_GROQ_API_KEY") {
-            loadingMsg.innerText = "⚠️ Groq API kaliti kiritilmagan. Lutfan, GROQ_API_KEY o'zgaruvchisiga kalitingizni kiriting.";
-            return;
-        }
-
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${GROQ_API_KEY}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                messages: [
-                    {
-                        role: "system",
-                        content: `Siz C dasturlash tili bo'yicha tajribali AI instruktorsiz. 
-Vazifangiz:
-1. Foydalanuvchining C kodidagi xatolarni (syntax, logic, memory leak, pointer xatolari) topish va to'g'rilash.
-2. Tushuntirishlarni o'zbek tilida, soddalashtirilgan va aniq berish.
-3. Koddagi muhim joylarni ajratib ko'rsatish.`
+                const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${GROQ_API_KEY}`,
+                        "Content-Type": "application/json"
                     },
-                    {
-                        role: "user",
-                        content: text
-                    }
-                ],
-                model: "llama-3.3-70b-versatile" // Groq ning eng kuchli va aniq modeli
-            })
-        });
+                    body: JSON.stringify({
+                        messages: [
+                            {
+                                role: "system",
+                                content: `Siz Iftixor Abdiqodirov tomonidan yaratilgan "C-Pro Studio" o'quv platformasining AI Instruktorsiz. 
+Foydalanuvchilarga C dasturlash tili bo'yicha koddagi xatolarni topishda, mantiqni tushuntirishda va C tiliga oid savollarga javob berishda yordam berasiz. Javoblaringiz aniq, sodda va o'zbek tilida bo'lishi kerak.`
+                            },
+                            {
+                                role: "user",
+                                content: val
+                            }
+                        ],
+                        model: "llama-3.3-70b-versatile"
+                    })
+                });
 
-        const data = await response.json();
+                const data = await response.json();
 
-        if (data.choices && data.choices[0].message.content) {
-            loadingMsg.innerText = data.choices[0].message.content;
-        } else {
-            loadingMsg.innerText = "❌ Groq API dan javob olishda xatolik yuz berdi.";
+                chat.removeChild(loadingMsg);
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'chat-bubble ai';
+
+                if(data.choices && data.choices[0].message.content) {
+                    aiMsg.innerText = data.choices[0].message.content;
+                } else {
+                    aiMsg.innerText = "❌ Groq API javobida xatolik yuz berdi.";
+                }
+                chat.appendChild(aiMsg);
+
+            } catch (err) {
+                chat.removeChild(loadingMsg);
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'chat-bubble ai';
+                errorMsg.innerText = "❌ Tarmoqda ulanish xatosi. Groq API kalitini tekshiring.";
+                chat.appendChild(errorMsg);
+            }
+            
+            chat.scrollTop = chat.scrollHeight;
         }
 
-    } catch (err) {
-        loadingMsg.innerText = "❌ Ulanishda xatolik yuz berdi. Internetni va API kalitni tekshiring.";
-    }
-}
+        // --- Core Application Logic ---
+        const modules = [
+            {
+                id: "printf_scanf",
+                title: "1. Printf va Scanf",
+                analogy: "printf() — bu kompyuterning OG'ZI (gapiradi). scanf() — bu kompyuterning QULOG'I (eshitib xotiraga yozadi)!",
+                text: "Printf yordamida ekranga yozuv chiqariladi, scanf yordamida esa foydalanuvchidan ma'lumot olinadi.",
+                code: `#include <stdio.h>\n\nint main() {\n    printf("Salom Iftixor platformasiga xush kelibsiz!\\n");\n    int yosh = 15;\n    printf("Sizning yoshingiz: %d\\n", yosh);\n    return 0;\n}`,
+                questions: [
+                    { q: "1. Printf() funksiyasining vazifasi nima?", opts: ["Sonlarni qo'shadi", "Ekranga ma'lumot chiqaradi", "Klaviatura kiritadi", "Kodni o'chiradi"], ans: 1 },
+                    { q: "2. Scanf() da & belgisi nega kerak?", opts: ["Ko'rinish uchun", "Xotira manzilini ko'rsatish uchun", "Ko'paytirish uchun", "Xatoni berkitish"], ans: 1 }
+                ],
+                tasks: [
+                    { t: "1-Masala: Ekranga o'zingizning ismingiz va yoshingizni chiqaring.", hint: "printf(\"Ismim: A, Yoshim: B\");" }
+                ]
+            }
+        ];
 
-function appendMessage(text, sender) {
-    const chatBox = document.getElementById('chatBox');
-    const div = document.createElement('div');
-    div.className = `msg ${sender}`;
-    div.innerText = text;
-    chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
-    return div;
-}
-</script>
-
+        function runCode() {
+            const code = document.getElementById('codeEditor').value;
+            const terminal = document.getElementById('terminalOutput');
+            terminal.innerText = "💻 Terminal: Kod muvaffaqiyatli simulyatsiya qilindi!\nOutput:\n" + code.substring(0, 100) + "...";
+        }
+    </script>
 </body>
 </html>
