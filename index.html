@@ -3,262 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C-AI Academy | Interaktiv Platforma</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>C-Pro Academy | Mega Interactive Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #090d16;
-            --panel-bg: #111827;
-            --card-bg: #1f2937;
-            --accent-cyan: #06b6d4;
-            --accent-blue: #3b82f6;
-            --text-main: #f9fafb;
-            --text-sub: #9ca3af;
-            --code-bg: #030712;
-            --success: #10b981;
+            --bg-dark: #0d1117;
+            --panel-bg: #161b22;
+            --card-bg: #21262d;
+            --accent: #58a6ff;
+            --accent-green: #238636;
+            --accent-purple: #a371f7;
+            --text-main: #f0f6fc;
+            --text-sub: #8b949e;
+            --border: #30363d;
+            --code-bg: #010409;
+            --font-size: 14px;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        .light-mode {
+            --bg-dark: #f6f8fa;
+            --panel-bg: #ffffff;
+            --card-bg: #f6f8fa;
+            --accent: #0969da;
+            --accent-green: #1a7f37;
+            --accent-purple: #8250df;
+            --text-main: #24292f;
+            --text-sub: #57606a;
+            --border: #d0d7de;
+            --code-bg: #ffffff;
         }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; transition: 0.3s; }
 
-        /* Sidebar Styling */
-        .sidebar {
-            width: 320px;
-            background-color: var(--panel-bg);
-            border-right: 1px solid #1f2937;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand {
-            padding: 24px;
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--accent-cyan);
-            border-bottom: 1px solid #1f2937;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .menu-list {
-            padding: 16px;
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .menu-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
-            color: var(--text-sub);
-            border-radius: 12px;
-            cursor: pointer;
-            margin-bottom: 8px;
-            transition: all 0.3s;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .menu-item:hover {
-            background: rgba(6, 182, 212, 0.1);
-            color: var(--accent-cyan);
-        }
-
-        .menu-item.active {
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
-            color: white;
-            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
-        }
+        /* Navigation Sidebar */
+        .sidebar { width: 280px; background-color: var(--panel-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+        .brand { padding: 20px; font-size: 18px; font-weight: bold; color: var(--accent); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .menu-list { padding: 12px; overflow-y: auto; flex: 1; }
+        .menu-category { font-size: 11px; text-transform: uppercase; color: var(--text-sub); margin: 12px 8px 6px 8px; font-weight: bold; }
+        .menu-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; color: var(--text-sub); border-radius: 8px; cursor: pointer; margin-bottom: 4px; font-size: 13px; transition: 0.2s; }
+        .menu-item:hover, .menu-item.active { background-color: var(--card-bg); color: var(--accent); }
+        .menu-item.active { font-weight: bold; border-left: 3px solid var(--accent); }
 
         /* Main Workspace */
-        .workspace {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
+        .workspace { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .top-bar { height: 55px; background-color: var(--panel-bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; }
+        .nav-tabs { display: flex; gap: 10px; }
+        .tab-btn { background: transparent; border: none; color: var(--text-sub); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .tab-btn.active { background: var(--card-bg); color: var(--accent); }
 
-        .header {
-            height: 65px;
-            background-color: var(--panel-bg);
-            border-bottom: 1px solid #1f2937;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 32px;
-        }
+        /* Views Container */
+        .view-container { flex: 1; display: flex; overflow: hidden; }
+        .main-view { flex: 1; padding: 24px; overflow-y: auto; }
 
-        .content-area {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            overflow: hidden;
-        }
+        /* Cards & Code Editor */
+        .card { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .editor-container { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 15px 0; }
+        .editor-header { background: var(--card-bg); padding: 8px 15px; font-size: 12px; color: var(--text-sub); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        textarea.code-editor { width: 100%; height: 160px; background: transparent; border: none; color: #a5d6ff; padding: 15px; font-family: 'Consolas', 'Courier New', monospace; font-size: var(--font-size); resize: none; outline: none; }
 
-        .lesson-viewer {
-            padding: 32px;
-            overflow-y: auto;
-        }
+        /* Interactive Quiz & Buttons */
+        .btn-group { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn { padding: 8px 20px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-success { background: var(--accent-green); color: white; }
+        .btn-secondary { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border); }
 
-        .lesson-card {
-            background: var(--panel-bg);
-            border: 1px solid #1f2937;
-            border-radius: 20px;
-            padding: 28px;
-            margin-bottom: 24px;
-        }
+        /* AI Side Panel */
+        .ai-panel { width: 350px; background: var(--panel-bg); border-left: 1px solid var(--border); display: flex; flex-direction: column; }
+        .ai-header { padding: 15px; border-bottom: 1px solid var(--border); font-weight: bold; color: var(--accent-purple); display: flex; align-items: center; gap: 8px; font-size: 14px; }
+        .chat-area { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px 14px; border-radius: 8px; font-size: 12.5px; line-height: 1.5; max-width: 90%; }
+        .msg.ai { background: var(--card-bg); border: 1px solid var(--border); align-self: flex-start; }
+        .msg.user { background: var(--accent); color: white; align-self: flex-end; }
+        .chat-input-box { padding: 12px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+        .chat-input-box input { flex: 1; background: var(--code-bg); border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; color: var(--text-main); outline: none; font-size: 12px; }
 
-        .lesson-title {
-            font-size: 26px;
-            color: var(--text-main);
-            margin-bottom: 12px;
-        }
+        /* Settings View */
+        .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border); }
 
-        .lesson-desc {
-            color: var(--text-sub);
-            line-height: 1.7;
-            margin-bottom: 20px;
-        }
-
-        /* Code Block */
-        .code-container {
-            background-color: var(--code-bg);
-            border-radius: 12px;
-            border: 1px solid #1f2937;
-            overflow: hidden;
-            margin-bottom: 24px;
-        }
-
-        .code-header {
-            background: #111827;
-            padding: 10px 16px;
-            font-size: 12px;
-            color: var(--text-sub);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        pre {
-            padding: 20px;
-            color: #38bdf8;
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            overflow-x: auto;
-        }
-
-        /* Practice Section */
-        .practice-box {
-            background: rgba(6, 182, 212, 0.05);
-            border: 1px dashed var(--accent-cyan);
-            border-radius: 16px;
-            padding: 20px;
-        }
-
-        .opt-btn {
-            display: block;
-            width: 100%;
-            padding: 12px 16px;
-            background: var(--card-bg);
-            border: 1px solid #374151;
-            color: var(--text-main);
-            border-radius: 10px;
-            margin-top: 10px;
-            cursor: pointer;
-            text-align: left;
-            transition: 0.2s;
-        }
-
-        .opt-btn:hover {
-            border-color: var(--accent-cyan);
-        }
-
-        /* AI Tutor Panel (Right side) */
-        .ai-panel {
-            background-color: var(--panel-bg);
-            border-left: 1px solid #1f2937;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .ai-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid #1f2937;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--accent-cyan);
-        }
-
-        .chat-box {
-            flex: 1;
-            padding: 16px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .msg {
-            padding: 12px 16px;
-            border-radius: 14px;
-            font-size: 13px;
-            line-height: 1.5;
-            max-width: 90%;
-        }
-
-        .msg.ai {
-            background: var(--card-bg);
-            border: 1px solid #374151;
-            align-self: flex-start;
-        }
-
-        .msg.user {
-            background: var(--accent-blue);
-            color: white;
-            align-self: flex-end;
-        }
-
-        .input-box {
-            padding: 16px;
-            border-top: 1px solid #1f2937;
-            display: flex;
-            gap: 8px;
-        }
-
-        .input-box input {
-            flex: 1;
-            background: var(--code-bg);
-            border: 1px solid #374151;
-            padding: 10px 14px;
-            border-radius: 8px;
-            color: white;
-            outline: none;
-        }
-
-        .send-btn {
-            background: var(--accent-cyan);
-            border: none;
-            color: black;
-            padding: 0 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+        /* Output Box */
+        .output-box { background: #000; color: #00ff00; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; min-height: 50px; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
@@ -266,198 +91,308 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="brand">
-            <i class="fa-solid fa-microchip"></i> C-AI Academy
+            <span><i class="fa-solid fa-code"></i> C-Pro Platform</span>
         </div>
         <div class="menu-list" id="menuList">
-            <!-- JS dynamic content -->
+            <!-- Dynamic Menu Items -->
         </div>
     </div>
 
-    <!-- Main Workspace -->
+    <!-- Workspace -->
     <div class="workspace">
-        <div class="header">
-            <span style="color: var(--text-sub); font-size: 14px;">🎓 C Dasturlash Tili — Professional Kurs</span>
-            <span style="background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">● AI Aktiv</span>
+        <div class="top-bar">
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="switchTab('learn')"><i class="fa-solid fa-book-open"></i> Darslik va Amaliyot</button>
+                <button class="tab-btn" onclick="switchTab('ai-solver')"><i class="fa-solid fa-brain"></i> AI Masala Yechish</button>
+                <button class="tab-btn" onclick="switchTab('settings')"><i class="fa-solid fa-gear"></i> Sozlamalar</button>
+            </div>
         </div>
 
-        <div class="content-area">
-            <!-- Lesson View -->
-            <div class="lesson-viewer">
-                <div class="lesson-card">
-                    <h1 class="lesson-title" id="lTitle">...</h1>
-                    <p class="lesson-desc" id="lDesc">...</p>
-
-                    <div class="code-container">
-                        <div class="code-header">
-                            <span>main.c</span>
-                            <span>C Syntax</span>
+        <div class="view-container">
+            <!-- Main Learn View -->
+            <div class="main-view" id="learnView">
+                <div class="card">
+                    <h2 id="lessonTitle" style="margin-bottom: 10px; color: var(--accent);">Darslik...</h2>
+                    <p id="lessonText" style="color: var(--text-sub); line-height: 1.6; margin-bottom: 15px; font-size: 14px;"></p>
+                    
+                    <div class="editor-container">
+                        <div class="editor-header">
+                            <span><i class="fa-solid fa-terminal"></i> Interactive Code Editor (C Syntax)</span>
+                            <button class="btn btn-success" onclick="runCode()" style="padding: 4px 12px; font-size: 11px;"><i class="fa-solid fa-play"></i> Kodni Ishlatish</button>
                         </div>
-                        <pre><code id="lCode">...</code></pre>
+                        <textarea class="code-editor" id="codeEditor"></textarea>
                     </div>
 
-                    <div class="practice-box">
-                        <h3 style="margin-bottom: 10px; font-size: 16px;">🎯 Amaliy Topshiriq</h3>
-                        <p id="pTask" style="font-size: 14px; color: var(--text-sub); margin-bottom: 15px;"></p>
-                        <div id="pOptions"></div>
-                        <div id="pResult" style="margin-top: 12px; font-size: 14px; font-weight: bold; display: none;"></div>
+                    <div class="output-box" id="outputBox"></div>
+                </div>
+
+                <!-- Test & Task Section -->
+                <div class="card">
+                    <h3 style="margin-bottom: 12px; font-size: 15px;"><i class="fa-solid fa-list-check"></i> Amaliy Topshiriq & Savol</h3>
+                    <p id="quizQuestion" style="font-size: 13.5px; margin-bottom: 12px;"></p>
+                    <div id="quizOptions"></div>
+                    <div id="quizResult" style="margin-top: 10px; font-weight: bold; font-size: 13px;"></div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="prevLesson()"><i class="fa-solid fa-arrow-left"></i> Oldingisi</button>
+                        <button class="btn btn-primary" onclick="nextLesson()">Keyingisi (Next) <i class="fa-solid fa-arrow-right"></i></button>
                     </div>
                 </div>
             </div>
 
-            <!-- AI Chat Panel -->
-            <div class="ai-panel">
-                <div class="ai-header">
-                    <i class="fa-solid fa-robot"></i> AI C-Tutor Asistent
-                </div>
-                <div class="chat-box" id="chatBox">
-                    <div class="msg ai">
-                        Salom! Men C dasturlash tili bo'yicha shaxsiy AI yordamchingizman. Darsda tushunmagan joyingiz bo'lsa, bemalol so'rang!
+            <!-- AI Problem Solver View -->
+            <div class="main-view" id="aiSolverView" style="display: none;">
+                <div class="card">
+                    <h2>🧠 AI Masalalar Yechuvchi Laboratoriya</h2>
+                    <p style="color: var(--text-sub); margin: 10px 0 15px 0; font-size: 13px;">Tayyor algoritmlar kodi va tahlili bilan tanishing:</p>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <button class="btn btn-secondary" onclick="solveAlgorithm('factorial')">Faktorial Topish</button>
+                        <button class="btn btn-secondary" onclick="solveAlgorithm('fibonacci')">Fibonavchi Ketma-ketligi</button>
+                        <button class="btn btn-secondary" onclick="solveAlgorithm('bubble')">Bubble Sort (Saralash)</button>
+                    </div>
+                    <div class="editor-container">
+                        <div class="editor-header"><span>Algoritm kodi va AI Tahlili</span></div>
+                        <textarea class="code-editor" id="aiSolverCode" style="height: 250px;" readonly></textarea>
                     </div>
                 </div>
-                <div class="input-box">
-                    <input type="text" id="userInput" placeholder="AI'dan so'rash..." onkeypress="if(event.key==='Enter') sendAI()">
-                    <button class="send-btn" onclick="sendAI()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+
+            <!-- Settings View -->
+            <div class="main-view" id="settingsView" style="display: none;">
+                <div class="card">
+                    <h2>⚙️ Platforma Sozlamalari</h2>
+                    <div class="settings-row">
+                        <span>Tungi / Kunduzgi Rejim (Dark/Light Mode)</span>
+                        <button class="btn btn-secondary" onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i> Rejimni o'zgartirish</button>
+                    </div>
+                    <div class="settings-row">
+                        <span>Kod Muharriri Shrift O'lchami</span>
+                        <select id="fontSizeSelect" onchange="changeFontSize(this.value)" style="background: var(--code-bg); color: var(--text-main); border: 1px solid var(--border); padding: 5px 10px; border-radius: 6px;">
+                            <option value="12px">12px (Kichik)</option>
+                            <option value="14px" selected>14px (O'rtacha)</option>
+                            <option value="16px">16px (Katta)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Chat Assistant Panel -->
+            <div class="ai-panel">
+                <div class="ai-header"><i class="fa-solid fa-robot"></i> AI C-Tutor Assistant</div>
+                <div class="chat-area" id="chatArea">
+                    <div class="msg ai">Salom! C dasturlash bo'yicha har qanday qiyin savol yoki xatoliklarni so'rashingiz mumkin.</div>
+                </div>
+                <div class="chat-input-box">
+                    <input type="text" id="aiInput" placeholder="AI'dan so'rash..." onkeypress="if(event.key==='Enter') askAI()">
+                    <button class="btn btn-primary" onclick="askAI()" style="padding: 6px 12px;"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const lessons = [
+        const courseData = [
             {
-                title: "1. C Tilining Tuzilishi va main()",
-                desc: "C tilidagi har bir dastur main() funksiyasidan boshlanadi. Kompyuter kodingizni tepadan pastga qarab ketma-ket bajaradi.",
-                code: `#include <stdio.h>\n\nint main() {\n    // Ekranga chiqarish\n    printf("Salom, Dasturchi!\\n");\n    return 0;\n}`,
-                task: "Dasturning eng birinchi bajariladigan asosiy nuqtasi qaysi?",
-                opts: ["printf()", "include", "main() funksiyasi", "return 0"],
+                cat: "1. Asoslar",
+                title: "C Tilining Sintaksisi va main()",
+                text: "C tili dasturlashning poydevori hisoblanadi. Dastur main() funksiyasidan boshlanib, har bir buyruq oxirida nuqtali vergul (;) qo'yiladi.",
+                code: `#include <stdio.h>\n\nint main() {\n    printf("C Platformasiga xush kelibsiz!\\n");\n    return 0;\n}`,
+                question: "C tilida har bir buyruq (statement) oxiriga qanday belgi qo'yiladi?",
+                opts: [": (Ikki nuqta)", "; (Nuqtali vergul)", ". (Nuqta)", ", (Vergul)"],
+                correct: 1,
+                output: "C Platformasiga xush kelibsiz!"
+            },
+            {
+                cat: "1. Asoslar",
+                title: "O'zgaruvchilar va Ma'lumot Turlari",
+                text: "C tilida o'zgaruvchi e'lon qilishda uning turi ko'rsatiladi: int (butun son), float (kasr son), char (belgi).",
+                code: `#include <stdio.h>\n\nint main() {\n    int a = 10;\n    int b = 20;\n    printf("Yig'indi: %d", a + b);\n    return 0;\n}`,
+                question: "%d format belgilagichi qaysi ma'lumot turi uchun ishlatiladi?",
+                opts: ["float (kasr)", "char (belgi)", "int (butun son)", "double"],
                 correct: 2,
-                aiHint: "C tilida asosiy kirish nuqtasi bu har doim main() hisoblanadi."
+                output: "Yig'indi: 30"
             },
             {
-                title: "2. O'zgaruvchilar va Xotira (Data Types)",
-                desc: "Kompyuter xotirasidan joy ajratish uchun ma'lumot turlaridan foydalanamiz: int (butun son), float (kasr son), char (belgi).",
-                code: `#include <stdio.h>\n\nint main() {\n    int yosh = 22;\n    float narx = 99.99;\n    char belgi = 'C';\n    \n    printf("Yosh: %d, Narx: %.2f", yosh, narx);\n    return 0;\n}`,
-                task: "O'nlik kasr sonlarni saqlash uchun qaysi ma'lumot turi ishlatiladi?",
-                opts: ["int", "float", "char", "void"],
+                cat: "2. Mantiq va Tsikllar",
+                title: "Shart Operatorlari (If / Else)",
+                text: "Dasturingiz tarmoqlanishi uchun if, else if va else kalit so'zlaridan foydalaniladi.",
+                code: `#include <stdio.h>\n\nint main() {\n    int son = 7;\n    if(son % 2 == 0) {\n        printf("Juft son");\n    } else {\n        printf("Toq son");\n    }\n    return 0;\n}`,
+                question: "Yuqoridagi kod 7 soni uchun nima chiqaradi?",
+                opts: ["Juft son", "Toq son", "Xatolik", "0"],
                 correct: 1,
-                aiHint: "Kasr sonlar uchun float yoki double ishlatiladi."
+                output: "Toq son"
             },
             {
-                title: "3. Mantiq va Shartlar (If / Else)",
-                desc: "Shart operatorlari dasturingizga qaror qabul qilish imkonini beradi. Agar shart to'g'ri (true) bo'lsa, ma'lum blok ishlaydi.",
-                code: `#include <stdio.h>\n\nint main() {\n    int ball = 75;\n    if (ball >= 60) {\n        printf("Imtihondan o'tdingiz!");\n    } else {\n        printf("Qayta topshirasiz.");\n    }\n    return 0;\n}`,
-                task: "ball = 55 bo'lsa ekranda nima chiqadi?",
-                opts: ["Imtihondan o'tdingiz!", "Qayta topshirasiz.", "Hech narsa", "Xatolik"],
+                cat: "2. Mantiq va Tsikllar",
+                title: "For va While Tsikllari",
+                text: "Bir necha bor takrorlanadigan amallar uchun tsikllardan foydalaniladi.",
+                code: `#include <stdio.h>\n\nint main() {\n    for(int i = 1; i <= 3; i++) {\n        printf("%d ", i);\n    }\n    return 0;\n}`,
+                question: "for(int i=0; i<5; i++) necha marta takrorlanadi?",
+                opts: ["4 marta", "5 marta", "6 marta", "Cheksiz"],
                 correct: 1,
-                aiHint: "55 soni 60 dan kichik bo'lgani uchun 'else' bo'limi ishlaydi."
+                output: "1 2 3 "
             },
             {
-                title: "4. Tsikllar va Takrorlanish (For / While)",
-                desc: "Kodni 100 marta qayta yozmaslik uchun tsikllardan foydalanamiz.",
-                code: `#include <stdio.h>\n\nint main() {\n    for(int i = 1; i <= 5; i++) {\n        printf("Qadam: %d\\n", i);\n    }\n    return 0;\n}`,
-                task: "for(int i=0; i<3; i++) nechta sikl bajaradi?",
-                opts: ["2 marta", "3 marta", "4 marta", "1 marta"],
+                cat: "3. Murakkab Tuzilmalar",
+                title: "Massivlar (Arrays)",
+                text: "Bir xil turdagi ko'plab qiymatlarni bitta o'zgaruvchida saqlash usuli.",
+                code: `#include <stdio.h>\n\nint main() {\n    int mas[3] = {5, 10, 15};\n    printf("%d", mas[1]);\n    return 0;\n}`,
+                question: "mas[1] elementi qaysi qiymatga teng?",
+                opts: ["5", "10", "15", "0"],
                 correct: 1,
-                aiHint: "i qiymati 0, 1, va 2 bo'lganda ishlaydi. Jami 3 marta."
+                output: "10"
             },
             {
-                title: "5. Ko'rsatkichlar (Pointers)",
-                desc: "Pointer — bu o'zgaruvchining qiymatini emas, uning RAM xotirasidagi manzilini saqlaydigan ko'rsatkichdir.",
-                code: `#include <stdio.h>\n\nint main() {\n    int son = 50;\n    int *ptr = &son; // ptr son'ning manzilini oladi\n    \n    printf("Manzil: %p\\n", ptr);\n    printf("Qiymat: %d\\n", *ptr);\n    return 0;\n}`,
-                task: "O'zgaruvchining xotiradagi manzilini olish uchun qaysi operator ishlatiladi?",
+                cat: "3. Murakkab Tuzilmalar",
+                title: "Ko'rsatkichlar (Pointers)",
+                text: "Pointer - bu xotira manzilini (Memory Address) saqlaydigan maxsus o'zgaruvchidir.",
+                code: `#include <stdio.h>\n\nint main() {\n    int x = 100;\n    int *ptr = &x;\n    printf("%d", *ptr);\n    return 0;\n}`,
+                question: "O'zgaruvchining xotiradagi manzilini olish uchun qaysi belgi ishlatiladi?",
                 opts: ["*", "&", "%", "->"],
                 correct: 1,
-                aiHint: "& (ampersand) belgisi o'zgaruvchining manzillarini oladi."
+                output: "100"
             }
         ];
 
-        let currLesson = 0;
+        let currIdx = 0;
 
-        function initMenu() {
-            const container = document.getElementById('menuList');
-            container.innerHTML = '';
-            lessons.forEach((l, index) => {
-                const item = document.createElement('div');
-                item.className = `menu-item ${index === 0 ? 'active' : ''}`;
-                item.innerHTML = `<i class="fa-solid fa-code"></i> ${l.title}`;
-                item.onclick = () => loadLesson(index);
-                container.appendChild(item);
+        function renderMenu() {
+            const list = document.getElementById('menuList');
+            list.innerHTML = '';
+            let currentCat = '';
+
+            courseData.forEach((item, idx) => {
+                if(item.cat !== currentCat) {
+                    currentCat = item.cat;
+                    const catEl = document.createElement('div');
+                    catEl.className = 'menu-category';
+                    catEl.innerText = currentCat;
+                    list.appendChild(catEl);
+                }
+                const mItem = document.createElement('div');
+                mItem.className = `menu-item ${idx === 0 ? 'active' : ''}`;
+                mItem.innerHTML = `<i class="fa-solid fa-code"></i> ${item.title}`;
+                mItem.onclick = () => loadLesson(idx);
+                list.appendChild(mItem);
             });
-            loadLesson(0);
         }
 
-        function loadLesson(index) {
-            currLesson = index;
-            const l = lessons[index];
+        function loadLesson(idx) {
+            currIdx = idx;
+            const data = courseData[idx];
 
             document.querySelectorAll('.menu-item').forEach((el, i) => {
-                el.classList.toggle('active', i === index);
+                el.classList.toggle('active', i === idx);
             });
 
-            document.getElementById('lTitle').innerText = l.title;
-            document.getElementById('lDesc').innerText = l.desc;
-            document.getElementById('lCode').innerText = l.code;
-            document.getElementById('pTask').innerText = l.task;
+            document.getElementById('lessonTitle').innerText = `${idx + 1}. ${data.title}`;
+            document.getElementById('lessonText').innerText = data.text;
+            document.getElementById('codeEditor').value = data.code;
+            document.getElementById('quizQuestion').innerText = data.question;
+            document.getElementById('outputBox').style.display = 'none';
 
-            const optsBox = document.getElementById('pOptions');
+            const optsBox = document.getElementById('quizOptions');
             optsBox.innerHTML = '';
-            l.opts.forEach((opt, i) => {
+            data.opts.forEach((opt, i) => {
                 const b = document.createElement('button');
-                b.className = 'opt-btn';
-                b.innerText = `${i+1}. ${opt}`;
-                b.onclick = () => checkAns(i);
+                b.className = 'btn btn-secondary';
+                b.style.width = '100%';
+                b.style.marginBottom = '8px';
+                b.style.justifyContent = 'flex-start';
+                b.innerText = `${i + 1}) ${opt}`;
+                b.onclick = () => checkQuiz(i);
                 optsBox.appendChild(b);
             });
-
-            const res = document.getElementById('pResult');
-            res.style.display = 'none';
+            document.getElementById('quizResult').innerText = '';
         }
 
-        function checkAns(chosen) {
-            const l = lessons[currLesson];
-            const res = document.getElementById('pResult');
-            res.style.display = 'block';
-
-            if(chosen === l.correct) {
-                res.style.color = '#10b981';
-                res.innerText = "🎯 To'g'ri! Baraka toping. AI sizni maqtamoqda!";
-                addAIMsg(`Ofarin! "${l.title}" darsidagi topshiriqni a'lo darajada bajardingiz! 🚀`);
+        function checkQuiz(chosen) {
+            const data = courseData[currIdx];
+            const res = document.getElementById('quizResult');
+            if(chosen === data.correct) {
+                res.style.color = '#2ea043';
+                res.innerText = "✅ To'g'ri javob!";
             } else {
-                res.style.color = '#ef4444';
-                res.innerText = "❌ Noto'g'ri javob. Maslahat uchun AI Asistentga qarang!";
-                addAIMsg(`Yordam beraman: ${l.aiHint}`);
+                res.style.color = '#f85149';
+                res.innerText = "❌ Noto'g'ri, qayta urinib ko'ring.";
             }
         }
 
-        function addAIMsg(text, isUser = false) {
-            const chatBox = document.getElementById('chatBox');
-            const msg = document.createElement('div');
-            msg.className = `msg ${isUser ? 'user' : 'ai'}`;
-            msg.innerText = text;
-            chatBox.appendChild(msg);
-            chatBox.scrollTop = chatBox.scrollHeight;
+        function runCode() {
+            const data = courseData[currIdx];
+            const out = document.getElementById('outputBox');
+            out.style.display = 'block';
+            out.innerText = `> Executing C Program...\n> Output:\n${data.output}`;
         }
 
-        function sendAI() {
-            const input = document.getElementById('userInput');
+        function nextLesson() {
+            if(currIdx < courseData.length - 1) loadLesson(currIdx + 1);
+        }
+
+        function prevLesson() {
+            if(currIdx > 0) loadLesson(currIdx - 1);
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('learnView').style.display = 'none';
+            document.getElementById('aiSolverView').style.display = 'none';
+            document.getElementById('settingsView').style.display = 'none';
+
+            if(tab === 'learn') {
+                document.getElementById('learnView').style.display = 'block';
+                event.target.classList.add('active');
+            } else if(tab === 'ai-solver') {
+                document.getElementById('aiSolverView').style.display = 'block';
+                event.target.classList.add('active');
+            } else if(tab === 'settings') {
+                document.getElementById('settingsView').style.display = 'block';
+                event.target.classList.add('active');
+            }
+        }
+
+        function solveAlgorithm(alg) {
+            const area = document.getElementById('aiSolverCode');
+            if(alg === 'factorial') {
+                area.value = `// Faktorialni hisoblash (AI Solution)\n#include <stdio.h>\n\nlong long factorial(int n) {\n    if (n <= 1) return 1;\n    return n * factorial(n - 1);\n}\n\nint main() {\n    printf("5! = %lld", factorial(5));\n    return 0;\n}`;
+            } else if(alg === 'fibonacci') {
+                area.value = `// Fibonavchi ketma-ketligi\n#include <stdio.h>\n\nvoid fibonacci(int n) {\n    int a = 0, b = 1, next;\n    for(int i=0; i<n; i++) {\n        printf("%d ", a);\n        next = a + b;\n        a = b;\n        b = next;\n    }\n}\n\nint main() { fibonacci(7); return 0; }`;
+            } else if(alg === 'bubble') {
+                area.value = `// Bubble Sort (Saralash)\n#include <stdio.h>\n\nvoid bubbleSort(int arr[], int n) {\n    for(int i=0; i<n-1; i++)\n        for(int j=0; j<n-i-1; j++)\n            if(arr[j] > arr[j+1]) {\n                int temp = arr[j]; arr[j] = arr[j+1]; arr[j+1] = temp;\n            }\n}`;
+            }
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+        }
+
+        function changeFontSize(val) {
+            document.documentElement.style.setProperty('--font-size', val);
+        }
+
+        function askAI() {
+            const input = document.getElementById('aiInput');
             const val = input.value.trim();
             if(!val) return;
 
-            addAIMsg(val, true);
+            const chat = document.getElementById('chatArea');
+            const userMsg = document.createElement('div');
+            userMsg.className = 'msg user';
+            userMsg.innerText = val;
+            chat.appendChild(userMsg);
             input.value = '';
 
             setTimeout(() => {
-                let reply = "C tili juda qiziq! Darslarni ketma-ket o'rganib topshiriqlarni bajaring.";
-                const lower = val.toLowerCase();
-                if(lower.includes("salom")) reply = "Salom! C dasturlash bo'yicha qanday savolingiz bor?";
-                else if(lower.includes("pointer") || lower.includes("ko'rsatkich")) reply = "Pointer — xotira manzilini saqlaydi. 5-darsda buni amalda ko'rishingiz mumkin!";
-                else if(lower.includes("yordam")) reply = "Chap menyudan darsni tanlang, o'qing va o mezonida amaliy topshiriqni yeching!";
-                
-                addAIMsg(reply);
-            }, 600);
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'msg ai';
+                aiMsg.innerText = `[AI Responser]: C tilida "${val}" bo'yicha masalangiz tahlil qilindi. Kod muharririga tahlil kodi yuklandi!`;
+                chat.appendChild(aiMsg);
+                chat.scrollTop = chat.scrollHeight;
+            }, 500);
         }
 
-        initMenu();
+        renderMenu();
+        loadLesson(0);
     </script>
 </body>
 </html>
